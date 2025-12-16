@@ -66,12 +66,18 @@ export function Header() {
           
           <nav className="hidden md:flex space-x-6">
             <Link
-              href="/"
+              href="/generate"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive('/') ? 'text-primary' : 'text-muted-foreground'
+                isActive('/generate') ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
-              首页
+              生成器
+            </Link>
+            <Link
+              href="/"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              落地页
             </Link>
             <Link
               href="/img-list"

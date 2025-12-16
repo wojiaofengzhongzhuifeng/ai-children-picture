@@ -161,7 +161,7 @@ export default function MyPage() {
                 <div className="col-span-full text-center py-12">
                   <p className="text-muted-foreground">您还没有生成任何图片</p>
                   <Button className="mt-4" asChild>
-                    <a href="/">开始生成</a>
+                    <a href="/generate">开始生成</a>
                   </Button>
                 </div>
               ) : (

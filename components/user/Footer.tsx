@@ -17,8 +17,13 @@ export function Footer() {
             <h4 className="text-sm font-medium">产品</h4>
             <ul className="space-y-2 text-sm">
               <li>
+                <Link href="/generate" className="text-muted-foreground hover:text-primary transition-colors">
+                  生成器
+                </Link>
+              </li>
+              <li>
                 <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
-                  首页
+                  落地页
                 </Link>
               </li>
               <li>
