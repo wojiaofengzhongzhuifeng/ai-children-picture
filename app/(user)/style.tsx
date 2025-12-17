@@ -159,3 +159,23 @@ export function ChoiceUsCard(props: {
     </div>
   );
 }
+
+export function PageWrapperFooter(props: { children: ReactNode }) {
+  return <div className="py-20 bg-orange-600">{props.children}</div>;
+}
+
+export function HeroTitleFooter(props: { children: ReactNode }) {
+  return <p className="text-[48px] text-white">{props.children}</p>;
+}
+
+export function HeroSubtitleFooter(props: { children: ReactNode }) {
+  return <p className="text-[18px] text-white mt-4">{props.children}</p>;
+}
+
+export function CtaPrimaryButtonFooter(props: { children: ReactNode }) {
+  return (
+    <Button className="bg-white rounded-sm px-14 py-8 border-2 border-white hover:bg-white/80">
+      {props.children}
+    </Button>
+  );
+}

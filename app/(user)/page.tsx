@@ -3,6 +3,7 @@ import CoreFeatures from "./my/CoreFunction";
 import UserFeedback from "./my/UserFeedback";
 import { CreatePicture } from "./my/CreatePicture";
 import ChoiceUs from "./my/ChoiceUs";
+import PageFoot from "./my/PageFoot";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <CreatePicture/>
       <ChoiceUs/>
       <UserFeedback />
+      <PageFoot />
     </div>
   );
 }
