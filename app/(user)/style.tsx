@@ -102,3 +102,22 @@ export function FeatureCard(props: {
     </div>
   );
 }
+
+export function UserFeedbackCard(props: {
+  children: ReactNode;
+  bgClass: string;
+  borderClass: string;
+}) {
+  const { children, bgClass, borderClass } = props;
+  return (
+    <div className="flex justify-center w-full">
+      <div className="flex flex-col h-full">
+        <div
+          className={`rounded-xl p-8 px-6 w-full max-w-[360px] h-[250px] flex flex-col border-4 ${bgClass} ${borderClass}` }
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
