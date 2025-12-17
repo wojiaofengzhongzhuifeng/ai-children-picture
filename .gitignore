@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI 生成的图片（不提交到仓库）
+/public/images/ai-children/*.png
+/public/images/ai-children/*.jpg
+/public/images/ai-children/*.jpeg

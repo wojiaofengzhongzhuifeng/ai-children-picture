@@ -1,65 +1,235 @@
-import { NextResponse } from 'next/server'
-import { GoogleGenAI } from "@google/genai";
+import { NextRequest, NextResponse } from 'next/server'
+import * as fs from 'fs'
+import * as path from 'path'
 
-export async function GET() {
+export async function POST(request: NextRequest) {
   try {
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY // ✅ 修正拼写：GEMINI 不是 GEMENI
-    });
+    // 1. 解析请求参数
+    const body = await request.json()
+    const { prompt, negativePrompt, model, size } = body
 
-    const prompt =
-      "Create a picture of a nano banana dish in a fancy restaurant with a Gemini theme";
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-image",
-      contents: prompt,
-    });
-
-    // 提取图片数据
-    if (!response.candidates || response.candidates.length === 0) {
-      return NextResponse.json({ success: false, error: "No candidates returned" }, { status: 500 });
+    // 2. 参数验证
+    if (!prompt || prompt.trim() === '') {
+      return NextResponse.json(
+        { error: '请提供图片描述' },
+        { status: 400 }
+      )
     }
 
-    const parts = response.candidates[0]?.content?.parts;
-    if (!parts) {
-      return NextResponse.json({ success: false, error: "No content parts found" }, { status: 500 });
+    // 3. 检查智谱 API Key
+    const zhipuApiKey = process.env.ZHIPU_API_KEY
+    if (!zhipuApiKey || zhipuApiKey.includes('placeholder')) {
+      return NextResponse.json(
+        { error: 'Zhipu API Key 未配置' },
+        { status: 500 }
+      )
     }
 
-    for (const part of parts) {
-      if (part.text) {
-        console.log(part.text);
-      } else if (part.inlineData) {
-        const imageData = part.inlineData.data;
-        // ✅ 返回 base64 图片给前端，而不是写文件到服务器
-        return NextResponse.json({
-          success: true,
-          imageData: `data:image/png;base64,${imageData}`,
-          mimeType: part.inlineData.mimeType
-        });
+    // 4. 解析尺寸
+    let width = 1024
+    let height = 1024
+    if (size && size.includes('x')) {
+      const [w, h] = size.split('x').map(Number)
+      if (!isNaN(w) && !isNaN(h)) {
+        width = w
+        height = h
       }
     }
 
-    // 如果没有图片数据
-    return NextResponse.json({ success: false, error: "No image generated" }, { status: 500 });
+    // 5. 准备智谱 API 请求参数
+    const requestBody = {
+      model: model || 'cogview-4',
+      prompt: prompt,
+      negative_prompt: negativePrompt || '',
+      size: `${width}x${height}`,
+      steps: 50,
+      seed: Math.floor(Math.random() * 1000000),
+      quality: 'standard',
+      style: 'natural'
+    }
 
-  } catch (error: any) {
-    console.error('Gemini API Error:', error);
+    console.log('正在调用智谱 CogView-4 API:', {
+      model: requestBody.model,
+      prompt: requestBody.prompt.substring(0, 50) + '...',
+      size: requestBody.size
+    })
+
+    // 6. 直接调用智谱 API（不使用封装）
+    const startTime = Date.now()
     
-    // ✅ 优雅处理配额超限错误
-    if (error.status === 429) {
+    const response = await fetch('https://open.bigmodel.cn/api/paas/v4/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${zhipuApiKey}`
+      },
+      body: JSON.stringify(requestBody),
+      signal: AbortSignal.timeout(60000) // 60秒超时
+    })
+
+    // 7. 处理响应
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('智谱 API 错误:', {
+        status: response.status,
+        body: errorText
+      })
+
+      let errorData
+      try {
+        errorData = JSON.parse(errorText)
+      } catch {
+        errorData = { error: { message: errorText } }
+      }
+
+      // 根据错误类型返回友好提示
+      if (response.status === 401) {
+        return NextResponse.json(
+          { error: 'API Key 无效或已过期' },
+          { status: 401 }
+        )
+      } else if (response.status === 429) {
+        return NextResponse.json(
+          { error: '请求过于频繁，请稍后重试' },
+          { status: 429 }
+        )
+      } else if (response.status === 402) {
+        return NextResponse.json(
+          { error: '账户余额不足，请充值' },
+          { status: 402 }
+        )
+      } else {
+        return NextResponse.json(
+          { 
+            error: '图片生成失败',
+            details: errorData.error?.message || response.statusText 
+          },
+          { status: response.status }
+        )
+      }
+    }
+
+    const data = await response.json()
+    const generationTime = Date.now() - startTime
+
+    // 8. 提取智谱返回的临时图片 URL
+    const zhipuImageUrl = data.data?.[0]?.url || data.image_url || data.image_urls?.[0]
+
+    if (!zhipuImageUrl) {
+      console.error('智谱 API 返回数据异常:', data)
+      return NextResponse.json(
+        { error: '未获取到生成的图片' },
+        { status: 500 }
+      )
+    }
+
+    console.log('智谱图片生成成功，开始下载并保存到本地:', {
+      generationTime: `${generationTime}ms`,
+      zhipuUrl: zhipuImageUrl.substring(0, 50) + '...'
+    })
+
+    // 9. 从智谱 URL 下载图片
+    let imageBuffer: Buffer
+    try {
+      const imageResponse = await fetch(zhipuImageUrl)
+      if (!imageResponse.ok) {
+        throw new Error(`下载图片失败: HTTP ${imageResponse.status}`)
+      }
+      imageBuffer = Buffer.from(await imageResponse.arrayBuffer())
+      console.log('图片下载成功，大小:', imageBuffer.length, 'bytes')
+    } catch (downloadError) {
+      console.error('下载智谱图片失败:', downloadError)
       return NextResponse.json(
         { 
-          success: false, 
-          error: "API配额已用完，请稍后重试或升级计划",
-          retryAfter: error.details?.retryDelay || "30s"
+          error: '下载生成的图片失败',
+          details: downloadError instanceof Error ? downloadError.message : '未知错误'
         },
-        { status: 429 }
-      );
+        { status: 500 }
+      )
+    }
+
+    // 10. 保存到本地 public/images/ai-children 目录
+    try {
+      // 生成唯一文件名
+      const timestamp = Date.now()
+      const randomStr = Math.random().toString(36).substring(7)
+      const fileName = `${timestamp}-${randomStr}.png`
+      
+      // 确保目录存在
+      const imagesDir = path.join(process.cwd(), 'public', 'images', 'ai-children')
+      if (!fs.existsSync(imagesDir)) {
+        fs.mkdirSync(imagesDir, { recursive: true })
+        console.log('创建目录:', imagesDir)
+      }
+
+      // 保存文件
+      const filePath = path.join(imagesDir, fileName)
+      fs.writeFileSync(filePath, imageBuffer)
+      
+      // 生成访问URL（相对于 public 目录）
+      const publicUrl = `/images/ai-children/${fileName}`
+      
+      console.log('图片保存成功:', {
+        filePath: filePath,
+        publicUrl: publicUrl
+      })
+
+      // 11. 返回本地静态资源 URL
+      return NextResponse.json({
+        success: true,
+        imageUrl: publicUrl,
+        originalUrl: zhipuImageUrl,
+        storagePath: `images/ai-children/${fileName}`,
+        model: data.model || requestBody.model,
+        generationTime: generationTime,
+        metadata: {
+          prompt: prompt,
+          negativePrompt: negativePrompt,
+          width: width,
+          height: height,
+          steps: 50,
+          seed: requestBody.seed
+        }
+      })
+
+    } catch (saveError) {
+      console.error('保存图片到本地失败:', saveError)
+      
+      // 如果保存失败，降级返回智谱临时URL
+      return NextResponse.json({
+        success: true,
+        imageUrl: zhipuImageUrl,
+        model: data.model || requestBody.model,
+        generationTime: generationTime,
+        warning: '图片保存失败，使用临时URL',
+        error: saveError instanceof Error ? saveError.message : '保存失败',
+        metadata: {
+          prompt: prompt,
+          negativePrompt: negativePrompt,
+          width: width,
+          height: height,
+          steps: 50,
+          seed: requestBody.seed
+        }
+      })
+    }
+
+  } catch (error) {
+    console.error('生成图片 API 错误:', error)
+    
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json(
+        { error: '请求超时，请重试' },
+        { status: 504 }
+      )
     }
 
     return NextResponse.json(
-      { success: false, error: error.message || "生成图片失败" },
+      { 
+        error: '服务器内部错误',
+        details: error instanceof Error ? error.message : '未知错误'
+      },
       { status: 500 }
-    );
+    )
   }
-}  
+}
