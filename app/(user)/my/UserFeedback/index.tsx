@@ -3,7 +3,7 @@ import {
   UserFeedbackHeadIcon,
   UserFeedbackStarIcon,
 } from "@/app/(user)/my/icon";
-export default function CreatePicture() {
+export default function UserFeedback() {
   return (
     <Section className="mt-16">
       <div className="flex gap-4 justify-center w-full">

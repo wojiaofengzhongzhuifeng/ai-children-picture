@@ -1,13 +1,14 @@
 import PageTitle from "./my/PageTitle";
 import CoreFeatures from "./my/CoreFunction";
-import CreatePicture from "./my/CreatePicture";
+import UserFeedback from "./my/UserFeedback";
 
 export default function HomePage() {
   return (
     <div>
       <PageTitle />
       <CoreFeatures />
-      <CreatePicture />
+      
+      <UserFeedback />
     </div>
   );
 }
