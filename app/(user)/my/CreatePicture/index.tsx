@@ -1,19 +1,9 @@
+import { CreatePictureCard, HeroSection, Section } from "@/app/(user)/style";
 import {
-  CreatePictureCard,
-  FeatureCard,
-  HeroSection,
-  Section,
-} from "../../style";
-import {
-  ArtisticIcon,
-  ArtisticTickIcon,
   CreatePictureNumber1,
   CreatePictureNumber2,
   CreatePictureNumber3,
-  IntelligentTickIcon,
-  ProfessionalIcon,
-  ProfessionalTickIcon,
-} from "../icon";
+} from "@/app/(user)/my/icon";
 
 export function CreatePicture() {
   return (
