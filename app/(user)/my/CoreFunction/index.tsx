@@ -1,5 +1,17 @@
-import { Section, HeroSection, HeroTitle, FeatureCard } from "@/app/(user)/style";
-import { ArtisticIcon, ArtisticTickIcon, IntelligentIcon, IntelligentTickIcon, ProfessionalIcon, ProfessionalTickIcon } from "../icon";
+import {
+  Section,
+  HeroSection,
+  HeroTitle,
+  FeatureCard,
+} from "@/app/(user)/style";
+import {
+  ArtisticIcon,
+  ArtisticTickIcon,
+  IntelligentIcon,
+  IntelligentTickIcon,
+  ProfessionalIcon,
+  ProfessionalTickIcon,
+} from "../icon";
 
 export default function CoreFeatures() {
   return (
@@ -57,7 +69,6 @@ export default function CoreFeatures() {
                 即时预览编辑
               </div>
             </FeatureCard>
-
           </div>
         </HeroSection>
       </div>

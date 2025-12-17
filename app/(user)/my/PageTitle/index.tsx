@@ -1,4 +1,9 @@
-import { MyPageIcon, CreationIcon, BrowseLibraryIcon, Arrows } from "@/app/(user)/my/icon";
+import {
+  MyPageIcon,
+  CreationIcon,
+  BrowseLibraryIcon,
+  Arrows,
+} from "@/app/(user)/my/icon";
 import { PageWrapper, Section } from "@/app/(user)/style";
 import { HeroSection } from "@/app/(user)/style";
 import { HeroTitle } from "@/app/(user)/style";

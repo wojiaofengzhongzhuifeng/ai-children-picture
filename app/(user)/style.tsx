@@ -113,7 +113,7 @@ export function UserFeedbackCard(props: {
     <div className="flex justify-center w-full">
       <div className="flex flex-col h-full">
         <div
-          className={`rounded-xl p-8 px-6 w-full max-w-[360px] h-[250px] flex flex-col border-4 ${bgClass} ${borderClass}` }
+          className={`rounded-xl p-8 px-6 w-full max-w-[360px] h-[250px] flex flex-col border-4 ${bgClass} ${borderClass}`}
         >
           {children}
         </div>
