@@ -11,7 +11,7 @@ import {
   IntelligentTickIcon,
   ProfessionalIcon,
   ProfessionalTickIcon,
-} from "../icon";
+} from "@/app/(user)/my/icon";
 
 export default function CoreFeatures() {
   return (

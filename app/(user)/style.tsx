@@ -140,3 +140,22 @@ export function CreatePictureCard(props: {
     </div>
   );
 }
+
+export function ChoiceUsCard(props: {
+  children: ReactNode;
+  bgClass: string;
+  borderClass: string;
+}) {
+  const { children, bgClass, borderClass } = props;
+  return (
+    <div className="flex justify-center w-full">
+      <div className="flex flex-col h-full">
+        <div
+          className={`rounded-xl p-8 px-6  w-[270px] h-[190px] flex flex-col border-4 ${bgClass} ${borderClass}`}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
