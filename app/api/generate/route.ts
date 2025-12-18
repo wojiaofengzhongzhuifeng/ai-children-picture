@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
 import { imageGenerator, imageRepository, generationRepository } from '@/lib'
 import { Database } from '@/types/database'
 

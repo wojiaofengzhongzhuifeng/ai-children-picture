@@ -5,7 +5,7 @@ import {
   PageWrapperFooter,
   Section,
 } from "@/app/(user)/style";
-import { Arrows, PageFootIcon, PageFootTickIcon } from "../icon";
+import { PageFootIcon, PageFootTickIcon } from "../icon";
 
 export default function PageFoot() {
   return (
