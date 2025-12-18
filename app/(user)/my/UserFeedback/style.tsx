@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 
+export function PageWrapper(props: { children: ReactNode }) {
+  return <div className="py-20 bg-yellow-50">{props.children}</div>;
+}
+
 export function Section(props: { children: ReactNode; className?: string }) {
   const { children, className = "" } = props;
   const baseClass =
@@ -26,7 +30,7 @@ export function UserFeedbackCard(props: {
     <div className="flex justify-center w-full">
       <div className="flex flex-col h-full">
         <div
-          className={`rounded-xl p-8 px-6 w-full max-w-[360px] h-[250px] flex flex-col border-4 ${bgClass} ${borderClass}`}
+          className={`rounded-xl p-8 px-6 w-full max-w-[360px] h-[250px] flex flex-col border-4 ${bgClass} ${borderClass} shadow-md`}
         >
           {children}
         </div>

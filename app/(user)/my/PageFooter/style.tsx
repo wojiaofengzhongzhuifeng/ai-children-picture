@@ -25,5 +25,5 @@ export function PageFooterItem(props: { children: ReactNode }) {
 }
 
 export function PageFooterSubtitle(props: { children: ReactNode }) {
-  return <p className="text-[16px]  text-gray-400 mt-4">{props.children}</p>;
+  return <p className="text-[16px]  text-gray-400 mt-6">{props.children}</p>;
 }

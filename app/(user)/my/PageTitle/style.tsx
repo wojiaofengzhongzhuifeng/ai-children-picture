@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 // 页面骨架
 export function PageWrapper(props: { children: ReactNode }) {
-  return <div className="py-20">{props.children}</div>;
+  return <div className="py-20 bg-yellow-50">{props.children}</div>;
 }
 
 export function Section(props: { children: ReactNode; className?: string }) {

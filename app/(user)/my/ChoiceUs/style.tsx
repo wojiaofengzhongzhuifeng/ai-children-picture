@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 
+export function PageWrapper(props: { children: ReactNode }) {
+  return <div className="py-20 bg-white">{props.children}</div>;
+}
+
 export function Section(props: { children: ReactNode; className?: string }) {
   const { children, className = "" } = props;
   const baseClass =
