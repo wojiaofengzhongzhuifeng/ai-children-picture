@@ -1,54 +1,64 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Image, Settings, History, Heart } from 'lucide-react'
-import { Image as ImageType, Generation } from '@/lib'
-import { imageRepository, generationRepository, authService } from '@/lib'
-import { toast } from '@/hooks/use-toast'
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Image, Settings, History, Heart } from "lucide-react";
+import { Image as ImageType, Generation } from "@/lib";
+import { imageRepository, generationRepository, authService } from "@/lib";
+import { toast } from "@/hooks/use-toast";
 
 export default function MyPage() {
-  const [user, setUser] = useState<any>(null)
-  const [userImages, setUserImages] = useState<ImageType[]>([])
-  const [userGenerations, setUserGenerations] = useState<Generation[]>([])
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null);
+  const [userImages, setUserImages] = useState<ImageType[]>([]);
+  const [userGenerations, setUserGenerations] = useState<Generation[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const currentUser = await authService.getCurrentUser()
+        const currentUser = await authService.getCurrentUser();
         if (!currentUser) {
-          window.location.href = '/auth/login'
-          return
+          window.location.href = "/auth/login";
+          return;
         }
-        
-        setUser(currentUser)
-        
-        // 获取用户图片
-        const images = await imageRepository.findAll({ userId: currentUser.id })
-        setUserImages(images)
-        
-        // 获取用户生成记录
-        const generations = await generationRepository.findAll({ userId: currentUser.id })
-        setUserGenerations(generations)
-      } catch (error) {
-        console.error('获取用户数据失败:', error)
-        toast({
-          title: '获取失败',
-          description: '无法加载用户数据，请稍后重试',
-          variant: 'destructive',
-        })
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    fetchUserData()
-  }, [])
+        setUser(currentUser);
+
+        // 获取用户图片
+        const images = await imageRepository.findAll({
+          userId: currentUser.id,
+        });
+        setUserImages(images);
+
+        // 获取用户生成记录
+        const generations = await generationRepository.findAll({
+          userId: currentUser.id,
+        });
+        setUserGenerations(generations);
+      } catch (error) {
+        console.error("获取用户数据失败:", error);
+        toast({
+          title: "获取失败",
+          description: "无法加载用户数据，请稍后重试",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   if (loading) {
     return (
@@ -70,11 +80,11 @@ export default function MyPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return null
+    return null;
   }
 
   return (
@@ -83,7 +93,10 @@ export default function MyPage() {
         {/* 用户信息 */}
         <div className="flex items-center space-x-4 mb-8">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+            <AvatarImage
+              src={user.user_metadata?.avatar_url}
+              alt={user.email}
+            />
             <AvatarFallback className="text-2xl">
               {user.email?.charAt(0).toUpperCase()}
             </AvatarFallback>
@@ -94,8 +107,12 @@ export default function MyPage() {
             </h1>
             <p className="text-muted-foreground">{user.email}</p>
             <div className="flex items-center mt-2 space-x-2">
-              <Badge variant={user.user_metadata?.role === 'admin' ? 'default' : 'secondary'}>
-                {user.user_metadata?.role === 'admin' ? '管理员' : '普通用户'}
+              <Badge
+                variant={
+                  user.user_metadata?.role === "admin" ? "default" : "secondary"
+                }
+              >
+                {user.user_metadata?.role === "admin" ? "管理员" : "普通用户"}
               </Badge>
               <Badge variant="outline">
                 注册于 {new Date(user.created_at).toLocaleDateString()}
@@ -118,7 +135,7 @@ export default function MyPage() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">生成次数</CardTitle>
@@ -131,7 +148,7 @@ export default function MyPage() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">获得点赞</CardTitle>
@@ -154,7 +171,7 @@ export default function MyPage() {
             <TabsTrigger value="images">我的图片</TabsTrigger>
             <TabsTrigger value="history">生成历史</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="images" className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {userImages.length === 0 ? (
@@ -169,13 +186,15 @@ export default function MyPage() {
                   <Card key={image.id} className="overflow-hidden">
                     <div className="relative aspect-square overflow-hidden">
                       <img
-                        src={image.image_url || ''}
+                        src={image.image_url || ""}
                         alt={image.prompt}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute top-2 right-2">
-                        <Badge variant={image.is_public ? 'default' : 'secondary'}>
-                          {image.is_public ? '公开' : '私有'}
+                        <Badge
+                          variant={image.is_public ? "default" : "secondary"}
+                        >
+                          {image.is_public ? "公开" : "私有"}
                         </Badge>
                       </div>
                     </div>
@@ -202,7 +221,7 @@ export default function MyPage() {
               )}
             </div>
           </TabsContent>
-          
+
           <TabsContent value="history" className="space-y-4">
             <div className="space-y-4">
               {userGenerations.length === 0 ? (
@@ -218,17 +237,24 @@ export default function MyPage() {
                           <p className="font-medium">{generation.prompt}</p>
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span>模型: {generation.model}</span>
-                            <span>状态: {
-                              generation.status === 'success' ? '成功' :
-                              generation.status === 'failed' ? '失败' :
-                              generation.status === 'processing' ? '处理中' : '等待中'
-                            }</span>
+                            <span>
+                              状态:{" "}
+                              {generation.status === "success"
+                                ? "成功"
+                                : generation.status === "failed"
+                                ? "失败"
+                                : generation.status === "processing"
+                                ? "处理中"
+                                : "等待中"}
+                            </span>
                             {generation.generation_time && (
                               <span>耗时: {generation.generation_time}ms</span>
                             )}
                           </div>
                           {generation.error_message && (
-                            <p className="text-sm text-red-500">{generation.error_message}</p>
+                            <p className="text-sm text-red-500">
+                              {generation.error_message}
+                            </p>
                           )}
                         </div>
                         <div className="text-sm text-muted-foreground">
@@ -244,5 +270,5 @@ export default function MyPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
