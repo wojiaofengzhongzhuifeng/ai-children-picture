@@ -1,10 +1,10 @@
-import { Section } from "@/app/(user)/style";
 import {
+  Section,
   CreatePictureButton,
   CreatePictureSubtitle,
   CreatePictureTitle,
   CreatePictureWrapper,
-} from "@/app/(user)/style";
+} from "./style";
 import { PageFootIcon, PageFootTickIcon } from "../icon";
 
 export default function StartCreate() {

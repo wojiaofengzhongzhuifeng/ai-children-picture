@@ -1,4 +1,4 @@
-import { Section, HeroSection, FeatureCard } from "@/app/(user)/style";
+import { Section, HeroSection, FeatureCard } from "./style";
 import {
   ArtisticIcon,
   ArtisticTickIcon,

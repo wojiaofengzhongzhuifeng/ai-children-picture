@@ -4,7 +4,7 @@ import {
   PageFooterTitle,
   PageFooterWrapper,
   Section,
-} from "@/app/(user)/style";
+} from "./style";
 import { PageFooterIcon } from "../icon";
 
 export default function PageFooter() {

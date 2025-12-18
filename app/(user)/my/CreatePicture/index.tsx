@@ -1,4 +1,4 @@
-import { CreatePictureCard, HeroSection, Section } from "@/app/(user)/style";
+import { CreatePictureCard, HeroSection, Section } from "./style";
 import {
   CreatePictureNumber1,
   CreatePictureNumber2,

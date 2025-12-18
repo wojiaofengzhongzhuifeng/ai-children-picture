@@ -4,15 +4,18 @@ import {
   BrowseLibraryIcon,
   Arrows,
 } from "@/app/(user)/my/icon";
-import { PageWrapper, Section } from "@/app/(user)/style";
-import { HeroSection } from "@/app/(user)/style";
-import { HeroTitle } from "@/app/(user)/style";
-import { HeroSubtitle } from "@/app/(user)/style";
-import { CtaPrimaryButton } from "@/app/(user)/style";
-import { CtaSecondaryButton } from "@/app/(user)/style";
-import { FeatureChipOrange } from "@/app/(user)/style";
-import { FeatureChipPink } from "@/app/(user)/style";
-import { FeatureChipPurple } from "@/app/(user)/style";
+import {
+  PageWrapper,
+  Section,
+  HeroSection,
+  HeroTitle,
+  HeroSubtitle,
+  CtaPrimaryButton,
+  CtaSecondaryButton,
+  FeatureChipOrange,
+  FeatureChipPink,
+  FeatureChipPurple,
+} from "./style";
 
 export default function PageTitle() {
   return (

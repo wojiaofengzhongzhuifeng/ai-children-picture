@@ -1,4 +1,4 @@
-import { Section, HeroSection, ChoiceUsCard } from "@/app/(user)/style";
+import { Section, HeroSection, ChoiceUsCard } from "./style";
 import {
   ChoiceUsEasyIcon,
   ChoiceUsFlashIcon,
