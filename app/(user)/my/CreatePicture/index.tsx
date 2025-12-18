@@ -5,7 +5,7 @@ import {
   CreatePictureNumber3,
 } from "@/app/(user)/my/icon";
 
-export function CreatePicture() {
+export default function CreatePicture() {
   return (
     <Section className="mt-16">
       <div className="flex gap-4 justify-center w-full">

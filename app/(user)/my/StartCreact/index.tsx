@@ -1,37 +1,37 @@
+import { Section } from "@/app/(user)/style";
 import {
-  CtaPrimaryButtonFooter,
-  HeroSubtitleFooter,
-  HeroTitleFooter,
-  PageWrapperFooter,
-  Section,
+  CreatePictureButton,
+  CreatePictureSubtitle,
+  CreatePictureTitle,
+  CreatePictureWrapper,
 } from "@/app/(user)/style";
 import { PageFootIcon, PageFootTickIcon } from "../icon";
 
-export default function PageFoot() {
+export default function StartCreate() {
   return (
-    <PageWrapperFooter>
+    <CreatePictureWrapper>
       <Section>
-        <HeroTitleFooter>准备好开始创作了吗？</HeroTitleFooter>
-        <HeroSubtitleFooter>
+        <CreatePictureTitle>准备好开始创作了吗？</CreatePictureTitle>
+        <CreatePictureSubtitle>
           加入数千位家长和教师，为孩子创作独一无二的绘本故事
-        </HeroSubtitleFooter>
+        </CreatePictureSubtitle>
       </Section>
       <Section className="mt-10">
         <div className="gap-4 flex justify-center">
-          <CtaPrimaryButtonFooter>
+          <CreatePictureButton>
             <p className="text-orange-600 text-base flex items-center gap-2">
               <PageFootIcon />
               立即开始创作
               <PageFootTickIcon />
             </p>
-          </CtaPrimaryButtonFooter>
+          </CreatePictureButton>
         </div>
       </Section>
       <div className="mt-10 text-center">
-        <HeroSubtitleFooter>
+        <CreatePictureSubtitle>
           🎁 完全免费使用 · 无需信用卡 · 无限创作
-        </HeroSubtitleFooter>
+        </CreatePictureSubtitle>
       </div>
-    </PageWrapperFooter>
+    </CreatePictureWrapper>
   );
 }

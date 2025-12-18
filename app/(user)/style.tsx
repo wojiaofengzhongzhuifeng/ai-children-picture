@@ -160,22 +160,46 @@ export function ChoiceUsCard(props: {
   );
 }
 
-export function PageWrapperFooter(props: { children: ReactNode }) {
+export function CreatePictureWrapper(props: { children: ReactNode }) {
   return <div className="py-20 bg-orange-600">{props.children}</div>;
 }
 
-export function HeroTitleFooter(props: { children: ReactNode }) {
+export function CreatePictureTitle(props: { children: ReactNode }) {
   return <p className="text-[48px] text-white">{props.children}</p>;
 }
 
-export function HeroSubtitleFooter(props: { children: ReactNode }) {
+export function CreatePictureSubtitle(props: { children: ReactNode }) {
   return <p className="text-[18px] text-white mt-4">{props.children}</p>;
 }
 
-export function CtaPrimaryButtonFooter(props: { children: ReactNode }) {
+export function CreatePictureButton(props: { children: ReactNode }) {
   return (
     <Button className="bg-white rounded-sm px-14 py-8 border-2 border-white hover:bg-white/80">
       {props.children}
     </Button>
   );
+}
+
+export function PageFooterWrapper(props: { children: ReactNode }) {
+  return <div className="py-20 bg-gray-900">{props.children}</div>;
+}
+
+export function PageFooterTitle(props: { children: ReactNode }) {
+  return (
+    <p className="text-[32px] text-white flex justify-center gap-2">
+      {props.children}
+    </p>
+  );
+}
+
+export function PageFooterItem(props: { children: ReactNode }) {
+  return (
+    <p className="text-[20px]  text-gray-400 mt-4">
+      {props.children}
+    </p>
+  );
+}
+
+export function PageFooterSubtitle(props: { children: ReactNode }) {
+  return <p className="text-[16px]  text-gray-400 mt-4">{props.children}</p>;
 }

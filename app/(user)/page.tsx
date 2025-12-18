@@ -1,9 +1,10 @@
 import PageTitle from "./my/PageTitle";
 import CoreFeatures from "./my/CoreFunction";
 import UserFeedback from "./my/UserFeedback";
-import { CreatePicture } from "./my/CreatePicture";
+import CreatePicture from "./my/CreatePicture";
 import ChoiceUs from "./my/ChoiceUs";
-import PageFoot from "./my/StartCreact";
+import StartCreate from "./my/StartCreact";
+import PageFooter from "./my/PageFooter";
 
 export default function HomePage() {
   return (
@@ -13,7 +14,8 @@ export default function HomePage() {
       <CreatePicture />
       <ChoiceUs />
       <UserFeedback />
-      <PageFoot />
+      <StartCreate />
+      <PageFooter />
     </div>
   );
 }

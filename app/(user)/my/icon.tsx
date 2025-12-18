@@ -1446,3 +1446,104 @@ export function PageFootTickIcon() {
     </svg>
   );
 }
+
+export function PageFooterIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      viewBox="0 0 72 72"
+      fill="none"
+    >
+      <g filter="url(#filter0_dd_34_1253)">
+        <path
+          d="M12 18C12 9.16344 19.1634 2 28 2H44C52.8366 2 60 9.16344 60 18V34C60 42.8366 52.8366 50 44 50H28C19.1634 50 12 42.8366 12 34V18Z"
+          fill="#FF6B35"
+          shape-rendering="crispEdges"
+        />
+        <path
+          d="M36 20.1667V36.5001"
+          stroke="white"
+          stroke-width="2.33333"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M25.4999 33C25.1905 33 24.8938 32.8771 24.675 32.6583C24.4562 32.4395 24.3333 32.1428 24.3333 31.8333V16.6667C24.3333 16.3572 24.4562 16.0605 24.675 15.8417C24.8938 15.6229 25.1905 15.5 25.4999 15.5H31.3333C32.5709 15.5 33.7579 15.9917 34.6331 16.8668C35.5083 17.742 35.9999 18.929 35.9999 20.1667C35.9999 18.929 36.4916 17.742 37.3668 16.8668C38.2419 15.9917 39.4289 15.5 40.6666 15.5H46.4999C46.8093 15.5 47.1061 15.6229 47.3249 15.8417C47.5437 16.0605 47.6666 16.3572 47.6666 16.6667V31.8333C47.6666 32.1428 47.5437 32.4395 47.3249 32.6583C47.1061 32.8771 46.8093 33 46.4999 33H39.4999C38.5717 33 37.6814 33.3687 37.025 34.0251C36.3687 34.6815 35.9999 35.5717 35.9999 36.5C35.9999 35.5717 35.6312 34.6815 34.9748 34.0251C34.3184 33.3687 33.4282 33 32.4999 33H25.4999Z"
+          stroke="white"
+          stroke-width="2.33333"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <filter
+          id="filter0_dd_34_1253"
+          x="0"
+          y="0"
+          width="72"
+          height="72"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feMorphology
+            radius="4"
+            operator="erode"
+            in="SourceAlpha"
+            result="effect1_dropShadow_34_1253"
+          />
+          <feOffset dy="4" />
+          <feGaussianBlur stdDeviation="3" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_34_1253"
+          />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feMorphology
+            radius="3"
+            operator="erode"
+            in="SourceAlpha"
+            result="effect2_dropShadow_34_1253"
+          />
+          <feOffset dy="10" />
+          <feGaussianBlur stdDeviation="7.5" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="effect1_dropShadow_34_1253"
+            result="effect2_dropShadow_34_1253"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect2_dropShadow_34_1253"
+            result="shape"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
