@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // 页面骨架
 export function PageWrapper(props: { children: ReactNode }) {
@@ -32,12 +33,18 @@ export function HeroSubtitle(props: { children: ReactNode }) {
 }
 
 // CTA 按钮组件
-export function CtaPrimaryButton(props: { children: ReactNode }) {
-  return (
+export function CtaPrimaryButton(props: { children: ReactNode; href?: string }) {
+  const button = (
     <Button className="bg-orange-500 rounded-sm px-14 py-8 border-2 border-orange-200 hover:bg-orange-500/80">
       {props.children}
     </Button>
   );
+
+  if (props.href) {
+    return <Link href={props.href}>{button}</Link>;
+  }
+
+  return button;
 }
 
 export function CtaSecondaryButton(props: { children: ReactNode }) {

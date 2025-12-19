@@ -31,7 +31,7 @@ export default function PageTitle() {
       </HeroSection>
       <Section className="mt-10">
         <div className="gap-4 flex justify-center">
-          <CtaPrimaryButton>
+          <CtaPrimaryButton href="/form">
             <p className="text-white text-base flex items-center gap-2">
               <CreationIcon />
               立即开始创作
