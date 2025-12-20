@@ -13,7 +13,7 @@ export function PageWrapper(props: { children: ReactNode }) {
 export function FormCard(props: { children: ReactNode }) {
   return (
     <div className="text-center shadow-md border-2 border-yellow-100 pb-4 rounded-lg">
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-2 my-8">
         {props.children}
       </div>
     </div>
