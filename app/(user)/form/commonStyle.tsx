@@ -9,6 +9,16 @@ export function PageWrapper(props: { children: ReactNode }) {
   );
 }
 
+// 表单卡片容器
+export function FormCard(props: { children: ReactNode }) {
+  return (
+    <div className="text-center shadow-md border-2 border-yellow-100 pb-4 rounded-lg">
+      <div className="flex flex-col items-center justify-center">
+        {props.children}
+      </div>
+    </div>
+  );
+}
 
 // 表单标题
 export function FormTitle(props: { children: ReactNode }) {
@@ -26,7 +36,9 @@ export function FormSubtitle(props: { children: ReactNode }) {
 
 // 表单区块标题
 export function SectionTitle(props: { children: ReactNode }) {
-  return <div className="text-orange-600 mb-4 flex mx-10">{props.children}</div>;
+  return (
+    <div className="text-orange-600 mb-4 flex mx-10">{props.children}</div>
+  );
 }
 
 // 选项卡片容器
@@ -44,7 +56,7 @@ export function OptionCard(props: {
   return (
     <div
       onClick={onClick}
-      className={`pl-4 pr-32 py-3 pb-4 rounded-lg border-3 flex flex-col gap-1 cursor-pointer hover:border-pink-300 transition-all ${
+      className={`px-4 py-3 rounded-lg border-2 flex flex-col gap-1 cursor-pointer hover:border-pink-300 transition-all ${
         selected
           ? "border-orange-500 bg-orange-50 scale-105"
           : "border-yellow-200 bg-white"
