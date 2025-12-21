@@ -27,11 +27,11 @@ export default function StoryOverview() {
           </SectionTitle>
           <OptionGroup>
             <textarea
-              className="w-full mx-0 px-4 py-4 rounded-lg border-2 border-yellow-200 hover:border-pink-300 min-h-[200px]  text-left align-top resize-none box-border block"
+              className="w-[825px] mx-0 px-4 py-4 rounded-lg border-2 border-yellow-200 hover:border-pink-300 min-h-[300px] text-left align-top resize-none box-border block"
               value={storyLine || ""}
               onChange={(e) => setStoryLine(e.target.value)}
               placeholder="请输入故事概述..."
-              rows={6}
+              rows={10}
             ></textarea>
           </OptionGroup>
         </div>

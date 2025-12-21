@@ -66,25 +66,24 @@ export default function PictureBookTheme() {
       <div className="flex flex-wrap gap-4 mt-4">
         <div>
           <SectionTitle>📚 绘本主题 * （可多选）</SectionTitle>
-          <div className="flex flex-wrap gap-3 mx-32">
+          <div className="grid grid-cols-2 gap-3 mx-10 w-[825px]">
             {pictureBookThemeOptions.map((option) => (
-              <div key={option.id} className="flex-1 min-w-[calc(50%-6px)]">
-                <OptionCard
-                  selected={selectedPictureBookTheme === option.id}
-                  onClick={() => setSelectedPictureBookTheme(option.id)}
-                >
-                  <OptionTitle
-                    selected={selectedPictureBookTheme === option.id}
-                  >
-                    <div className="flex  gap-4">
-                      <div>{option.icon}</div>
-                      <div className="flex flex-col items-start">
-                        <div>{option.title}</div>
-                        <div>{option.desc}</div>
-                      </div>
-                    </div>
-                  </OptionTitle>
-                </OptionCard>
+              <div
+                key={option.id}
+                onClick={() => setSelectedPictureBookTheme(option.id)}
+                className={`px-6 py-4 rounded-lg border-2 flex gap-4 cursor-pointer hover:border-pink-300 transition-all ${
+                  selectedPictureBookTheme === option.id
+                    ? "border-orange-500 bg-orange-50 scale-105"
+                    : "border-yellow-200 bg-white"
+                }`}
+              >
+                <div>{option.icon}</div>
+                <div className="flex flex-col items-start">
+                  <div className={selectedPictureBookTheme === option.id ? "text-orange-600" : "text-gray-700"}>
+                    {option.title}
+                  </div>
+                  <div className="text-xs text-gray-500">{option.desc}</div>
+                </div>
               </div>
             ))}
           </div>
