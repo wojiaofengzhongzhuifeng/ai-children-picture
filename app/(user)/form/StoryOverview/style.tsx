@@ -9,7 +9,6 @@ export function PageWrapper(props: { children: ReactNode }) {
   );
 }
 
-
 // 表单标题
 export function FormTitle(props: { children: ReactNode }) {
   return (
@@ -26,7 +25,9 @@ export function FormSubtitle(props: { children: ReactNode }) {
 
 // 表单区块标题
 export function SectionTitle(props: { children: ReactNode }) {
-  return <div className="text-orange-600 mb-4 flex mx-10">{props.children}</div>;
+  return (
+    <div className="text-orange-600 mb-4 flex mx-10">{props.children}</div>
+  );
 }
 
 // 选项卡片容器

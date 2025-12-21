@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FormTitle,
-  FormSubtitle,
-  SectionTitle,
-  OptionGroup,
-  OptionCard,
-  OptionTitle,
-  OptionDesc,
-} from "./style";
-import { Input } from "antd";
+import { SectionTitle, OptionGroup } from "./style";
 
 export default function StoryOverview() {
   const [storyLine, setStoryLine] = useState<string | null>(null);
