@@ -36,7 +36,6 @@ export default function PictureStyle() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center"></div>
       <div className="flex flex-wrap gap-4 mt-4">
         <div>
           <SectionTitle>🎨 插画风格 *</SectionTitle>
