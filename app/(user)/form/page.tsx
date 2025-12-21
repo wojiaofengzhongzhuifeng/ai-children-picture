@@ -4,6 +4,7 @@ import PictureStyle from "./PictureStyle";
 import PictureBookTheme from "./PictureBookTheme";
 import StoryOverview from "./StoryOverview";
 import MainIdea from "./MainIdea";
+import CreateButton from "./CreateButton";
 
 export default function FormPage() {
   return (
@@ -15,6 +16,7 @@ export default function FormPage() {
           <PictureBookTheme />
           <StoryOverview />
           <MainIdea />
+          <CreateButton />
         </FormCard>
       </PageWrapper>
     </>
