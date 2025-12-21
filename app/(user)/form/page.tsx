@@ -3,6 +3,7 @@ import { FormCard, PageWrapper } from "./commonStyle";
 import PictureStyle from "./PictureStyle";
 import PictureBookTheme from "./PictureBookTheme";
 import StoryOverview from "./StoryOverview";
+import MainIdea from "./MainIdea";
 
 export default function FormPage() {
   return (
@@ -12,7 +13,8 @@ export default function FormPage() {
           <CreateNewBookForm />
           <PictureStyle />
           <PictureBookTheme />
-          <StoryOverview/>
+          <StoryOverview />
+          <MainIdea />
         </FormCard>
       </PageWrapper>
     </>
