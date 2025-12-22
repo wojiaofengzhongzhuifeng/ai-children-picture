@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { SectionTitle, OptionGroup } from "./style";
 import { MainIdeaIcon } from "./icon";
-export default function MainIdea() {
-  const [storyLine, setStoryLine] = useState<string | null>(null);
+import { MainIdeaProps } from "../pageApi";
 
+export default function MainIdea({ value, onChange }: MainIdeaProps) {
   return (
     <>
       <div className="flex flex-wrap gap-4 mt-4">
@@ -22,8 +21,8 @@ export default function MainIdea() {
           <OptionGroup>
             <textarea
               className="w-[825px] mx-0 px-4 py-4 rounded-lg border-2 border-yellow-200 hover:border-pink-300 min-h-[60px] text-left align-top resize-none box-border block"
-              value={storyLine || ""}
-              onChange={(e) => setStoryLine(e.target.value)}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
               placeholder="例如：学会分享、友谊的重要性、勇敢面对困难..."
               rows={1}
             ></textarea>

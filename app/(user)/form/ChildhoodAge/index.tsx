@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   FormTitle,
   FormSubtitle,
@@ -10,6 +9,7 @@ import {
   OptionTitle,
   OptionDesc,
 } from "./style";
+import { ChildhoodAgeProps } from "../pageApi";
 
 // 年龄选项数据
 const ageOptions = [
@@ -18,9 +18,7 @@ const ageOptions = [
   { id: "6-12", title: "6-12岁(小学低年级)", desc: "复杂情节、道理" },
 ];
 
-export default function CreateNewBookForm() {
-  const [selectedAge, setSelectedAge] = useState<string | null>(null);
-
+export default function CreateNewBookForm({ selectedAge, onAgeChange }: ChildhoodAgeProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -39,7 +37,7 @@ export default function CreateNewBookForm() {
               <OptionCard
                 key={option.id}
                 selected={selectedAge === option.id}
-                onClick={() => setSelectedAge(option.id)}
+                onClick={() => onAgeChange(option.id)}
               >
                 <OptionTitle selected={selectedAge === option.id}>
                   {option.title}

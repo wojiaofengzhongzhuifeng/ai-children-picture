@@ -1,11 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import {
   SectionTitle,
-  OptionGroup,
-  OptionCard,
-  OptionTitle,
 } from "../commonStyle";
 import {
   PictureBookThemeAdventureExplorationIcon,
@@ -15,8 +11,9 @@ import {
   PictureBookThemeNaturalScienceIcon,
   PictureBookThemeSocialBehaviorIcon,
 } from "./icon";
+import { PictureBookThemeProps } from "../pageApi";
 
-// 年龄选项数据
+// 绘本主题选项数据
 const pictureBookThemeOptions = [
   {
     id: "情感教育",
@@ -56,10 +53,16 @@ const pictureBookThemeOptions = [
   },
 ];
 
-export default function PictureBookTheme() {
-  const [selectedPictureBookTheme, setSelectedPictureBookTheme] = useState<
-    string | null
-  >(null);
+export default function PictureBookTheme({ selectedThemes, onThemesChange }: PictureBookThemeProps) {
+  const handleThemeClick = (themeId: string) => {
+    if (selectedThemes.includes(themeId)) {
+      // 如果已选中，则取消选中
+      onThemesChange(selectedThemes.filter(t => t !== themeId));
+    } else {
+      // 如果未选中，则添加
+      onThemesChange([...selectedThemes, themeId]);
+    }
+  };
 
   return (
     <>
@@ -67,25 +70,28 @@ export default function PictureBookTheme() {
         <div>
           <SectionTitle>📚 绘本主题 * （可多选）</SectionTitle>
           <div className="grid grid-cols-2 gap-3 mx-10 w-[825px]">
-            {pictureBookThemeOptions.map((option) => (
-              <div
-                key={option.id}
-                onClick={() => setSelectedPictureBookTheme(option.id)}
-                className={`px-6 py-4 rounded-lg border-2 flex gap-4 cursor-pointer hover:border-pink-300 transition-all ${
-                  selectedPictureBookTheme === option.id
-                    ? "border-orange-500 bg-orange-50 scale-105"
-                    : "border-yellow-200 bg-white"
-                }`}
-              >
-                <div>{option.icon}</div>
-                <div className="flex flex-col items-start">
-                  <div className={selectedPictureBookTheme === option.id ? "text-orange-600" : "text-gray-700"}>
-                    {option.title}
+            {pictureBookThemeOptions.map((option) => {
+              const isSelected = selectedThemes.includes(option.id);
+              return (
+                <div
+                  key={option.id}
+                  onClick={() => handleThemeClick(option.id)}
+                  className={`px-6 py-4 rounded-lg border-2 flex gap-4 cursor-pointer hover:border-pink-300 transition-all ${
+                    isSelected
+                      ? "border-orange-500 bg-orange-50 scale-105"
+                      : "border-yellow-200 bg-white"
+                  }`}
+                >
+                  <div>{option.icon}</div>
+                  <div className="flex flex-col items-start">
+                    <div className={isSelected ? "text-orange-600" : "text-gray-700"}>
+                      {option.title}
+                    </div>
+                    <div className="text-xs text-gray-500">{option.desc}</div>
                   </div>
-                  <div className="text-xs text-gray-500">{option.desc}</div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
