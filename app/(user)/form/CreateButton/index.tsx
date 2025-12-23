@@ -5,9 +5,24 @@ import { CreateButtonProps } from "../pageApi";
 import { usePostFormListHooks } from "../_hooks/postFormListHooks";
 import { PostFormList } from "../_api/postFormLIst";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CreateButton({ onSubmit }: CreateButtonProps) {
-  const { run, loading } = usePostFormListHooks();
+  const { run, loading, success, data } = usePostFormListHooks();
+  const router = useRouter();
+
+  // 监听成功状态，成功后跳转
+  useEffect(() => {
+    if (success && data) {
+      // 将数据存储到 sessionStorage，以便在 show 页面使用
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("bookData", JSON.stringify(data));
+      }
+      // 跳转到 show 页面
+      router.push("/show");
+    }
+  }, [success, data, router]);
 
   const handleCreate = async () => {
     const formData = onSubmit();

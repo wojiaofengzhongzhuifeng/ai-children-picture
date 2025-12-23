@@ -38,6 +38,7 @@ export const usePostFormListHooks = () => {
     data: data?.data,
     error: error?.message,
     loading,
+    success: data?.success || false,
     run: (params: PostFormList) => {
       run(params);
     },
