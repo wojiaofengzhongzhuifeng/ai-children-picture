@@ -1,5 +1,4 @@
-import { ApiConfig, getAuthHeaders, prefixUrl } from "./common";
-import axios from "axios";
+import { ApiConfig, prefixUrl, request } from "./common";
 
 export interface PostFormList {
   child_age: string;
@@ -19,31 +18,15 @@ export const postFormListApiConfig: ApiConfig = {
 
 export const postFormList = async (data: PostFormList) => {
   try {
-    const response = await axios.post(postFormListApiConfig.url, data, {
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders(),
-      },
-    });
+    const response = await request(postFormListApiConfig.url, postFormListApiConfig.method, data)
     return {
       success: true,
       message: "请求成功",
-      data: response.data,
+      data: response,
     };
   } catch (error: any) {
     console.error("API 请求错误:", error);
     // 抛出错误让 useRequest 处理
-    if (error.response) {
-      // 服务器返回了错误响应
-      throw new Error(
-        error.response.data?.error || error.response.data?.message || "请求失败"
-      );
-    } else if (error.request) {
-      // 请求已发出但没有收到响应
-      throw new Error("网络错误，请检查网络连接");
-    } else {
-      // 其他错误
-      throw new Error(error.message || "请求失败");
-    }
+    throw new Error(error.message || "请求失败");
   }
 };
