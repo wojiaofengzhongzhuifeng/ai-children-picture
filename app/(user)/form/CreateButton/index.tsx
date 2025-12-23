@@ -25,36 +25,13 @@ export default function CreateButton({ onSubmit }: CreateButtonProps) {
   }, [success, data, router]);
 
   const handleCreate = async () => {
-    const formData = onSubmit();
-    console.log("生成我的绘本 - 表单数据:");
-    console.log(JSON.stringify(formData, null, 2));
+    const formData = onSubmit(); // 这里就是你现在的 FormData（child_age 等）
 
-    // 验证必填字段
-    if (
-      !formData.child_age ||
-      !formData.illustration_style ||
-      formData.themes.length === 0 ||
-      !formData.story_overview ||
-      !formData.central_idea
-    ) {
-      toast({
-        title: "请填写完整信息",
-        description: "请确保所有必填项都已填写",
-        variant: "destructive",
-      });
-      return;
-    }
+    // 把整份表单对象序列化并编码
+    const payload = encodeURIComponent(JSON.stringify(formData));
 
-    // 转换为 API 需要的格式
-    const apiData: PostFormList = {
-      child_age: formData.child_age,
-      illustration_style: formData.illustration_style,
-      themes: formData.themes,
-      story_overview: formData.story_overview,
-      central_idea: formData.central_idea,
-    };
-
-    run(apiData);
+    // 用 query 传参
+    router.push(`/show?payload=${payload}`);
   };
 
   return (

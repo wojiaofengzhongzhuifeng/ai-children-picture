@@ -1,38 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { data, error, loading, run } = usePostFormListHooks();
+  const hasRunRef = useRef(false);
+
+  // 获取 payload 参数
+  const payload = searchParams.get("payload");
 
   useEffect(() => {
-    // 从 sessionStorage 获取数据
-    if (typeof window !== "undefined") {
-      const storedData = sessionStorage.getItem("bookData");
-      if (storedData) {
-        try {
-          setBookData(JSON.parse(storedData));
-        } catch (error) {
-          console.error("解析数据失败:", error);
-        }
-      } else {
-        // 如果没有数据，可以跳转回表单页面
-        // router.push("/form");
-      }
+    if (!payload) return;
+
+    try {
+      const parsed = JSON.parse(decodeURIComponent(payload));
+      setBookData(parsed);
+    } catch (e) {
+      console.error("解析 payload 失败:", e);
     }
-  }, []);
+  }, [payload]); // 只依赖 payload 字符串，不依赖整个 searchParams 对象
+
+  useEffect(() => {
+    if (!bookData || hasRunRef.current) return;
+
+    hasRunRef.current = true; // 标记已执行过
+
+    run({
+      child_age: bookData.child_age,
+      illustration_style: bookData.illustration_style,
+      themes: bookData.themes,
+      story_overview: bookData.story_overview,
+      central_idea: bookData.central_idea,
+    });
+  }, [bookData, run]); // 添加依赖数组，防止无限执行
 
   if (!bookData) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-gray-500">加载中...</p>
-        </div>
-      </div>
-    );
+    return <div>加载中...</div>;
   }
+
+  console.log("bookData", bookData);
+  console.log("data", data);
 
   return (
     <div>
