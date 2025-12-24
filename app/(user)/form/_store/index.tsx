@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { PostFormList } from "../postFormLIst";
+import { PostFormList } from "../_api/postFormLIst";
 
 export interface FormStore {
   formList: PostFormList[];

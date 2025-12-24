@@ -18,7 +18,11 @@ export const postFormListApiConfig: ApiConfig = {
 
 export const postFormList = async (data: PostFormList) => {
   try {
-    const response = await request(postFormListApiConfig.url, postFormListApiConfig.method, data)
+    const response = await request(
+      postFormListApiConfig.url,
+      postFormListApiConfig.method,
+      data
+    );
     return {
       success: true,
       message: "请求成功",
