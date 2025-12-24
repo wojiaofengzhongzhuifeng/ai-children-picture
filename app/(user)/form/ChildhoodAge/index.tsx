@@ -9,7 +9,7 @@ import {
   OptionTitle,
   OptionDesc,
 } from "./style";
-import { ChildhoodAgeProps } from "../pageApi";
+import { ChildhoodAgeProps } from "../_store";
 
 // 年龄选项数据
 const ageOptions = [

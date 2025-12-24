@@ -13,7 +13,7 @@ import {
   PictureStylePencilIcon,
   PictureStyleWatercolourIcon,
 } from "./icon";
-import { PictureStyleProps } from "../pageApi";
+import { PictureStyleProps } from "../_store";
 
 // 图片风格选项数据
 const pictureStyleOptions = [

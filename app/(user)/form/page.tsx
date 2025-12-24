@@ -8,7 +8,7 @@ import PictureBookTheme from "./PictureBookTheme";
 import StoryOverview from "./StoryOverview";
 import MainIdea from "./MainIdea";
 import CreateButton from "./CreateButton";
-import { FormData, ageMap, styleMap, themeMap } from "./pageApi";
+import { FormData, ageMap, styleMap, themeMap } from "./_store";
 
 export default function FormPage() {
   const [selectedAge, setSelectedAge] = useState<string | null>(null);

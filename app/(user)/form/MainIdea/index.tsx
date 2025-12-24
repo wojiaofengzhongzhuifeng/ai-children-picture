@@ -2,7 +2,7 @@
 
 import { SectionTitle, OptionGroup } from "./style";
 import { MainIdeaIcon } from "./icon";
-import { MainIdeaProps } from "../pageApi";
+import { MainIdeaProps } from "../_store";
 
 export default function MainIdea({ value, onChange }: MainIdeaProps) {
   return (

@@ -2,7 +2,7 @@
 
 import { SectionTitle, OptionGroup } from "./style";
 import { StoryOverviewIcon } from "./icon";
-import { StoryOverviewProps } from "../pageApi";
+import { StoryOverviewProps } from "../_store";
 
 export default function StoryOverview({ value, onChange }: StoryOverviewProps) {
   return (

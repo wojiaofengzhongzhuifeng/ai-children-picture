@@ -3,11 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
+import { usePostRenderingPaintingHooks } from "./_hooks/postRenderingPaintingHooks";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
   const searchParams = useSearchParams();
-  const { data, error, loading, run } = usePostFormListHooks();
+  const { data: renderingPaintingData, loading: renderingPaintingLoading, run: renderingPaintingRun } = usePostRenderingPaintingHooks();
   const hasRunRef = useRef(false);
 
   // 获取 payload 参数
@@ -29,22 +30,16 @@ export default function ShowPage() {
 
     hasRunRef.current = true; // 标记已执行过
 
-    run({
+    renderingPaintingRun({
+      central_idea: bookData.central_idea,
       child_age: bookData.child_age,
       illustration_style: bookData.illustration_style,
       themes: bookData.themes,
       story_overview: bookData.story_overview,
-      central_idea: bookData.central_idea,
     });
-  }, [bookData, run]); // 添加依赖数组，防止无限执行
+  }, [bookData, renderingPaintingRun]); // 添加依赖数组，防止无限执行
 
-  if (!bookData) {
-    return <div>加载中...</div>;
-  }
-
-  console.log("bookData", bookData);
-  console.log("data", data);
-
+  console.log("renderingPaintingData", renderingPaintingData);
   return (
     <div>
       {/* 左侧页面列表 */}
@@ -61,7 +56,12 @@ export default function ShowPage() {
         </div>
       </div>
       {/* 中间绘画图片 */}
-
+    {renderingPaintingData && renderingPaintingData.scenes.map((scene, index) => (
+      <div key={index}>
+        <img src={scene.img_text_prompt} alt={scene.text} />
+        <div>{scene.text}</div>
+      </div>
+    ))}
       {/* 右侧编辑内容 */}
     </div>
   );

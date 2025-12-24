@@ -1,7 +1,7 @@
 "use client";
 
 import { CreateButtonIcon } from "./icon";
-import { CreateButtonProps } from "../pageApi";
+import { CreateButtonProps } from "../_store";
 import { usePostFormListHooks } from "../_hooks/postFormListHooks";
 import { PostFormList } from "../_api/postFormLIst";
 import { toast } from "@/hooks/use-toast";

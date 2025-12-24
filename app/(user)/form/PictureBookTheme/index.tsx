@@ -11,7 +11,7 @@ import {
   PictureBookThemeNaturalScienceIcon,
   PictureBookThemeSocialBehaviorIcon,
 } from "./icon";
-import { PictureBookThemeProps } from "../pageApi";
+import { PictureBookThemeProps } from "../_store";
 
 // 绘本主题选项数据
 const pictureBookThemeOptions = [
