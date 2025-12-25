@@ -7,7 +7,7 @@ export interface PostAiCreactPicture {
 }
 
 const postAiCreactPictureApiConfig: ApiConfig = {
-    url: "/generate-ai-children-picture",
+    url: "/api/generate-ai-children-picture",
     method: "POST",
     manual: false,
     showError: true,
