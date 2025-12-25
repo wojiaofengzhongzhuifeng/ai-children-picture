@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
 import { useShowPageStore } from "./_store";
+import { postAiCreactPicture } from "./_api/postAiCreactPicture";
+import { usePostAiCreactPitureHooks } from "./_hooks/postAiCreactPitureHooks";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
@@ -11,6 +13,8 @@ export default function ShowPage() {
   const { data, error, loading, run, success } = usePostFormListHooks();
   const hasRunRef = useRef(false);
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
+  const [isGeneratingImages, setIsGeneratingImages] = useState(false);
+  const { run: runAiCreactPicture, data: aiCreactPictureData } = usePostAiCreactPitureHooks();
   // 获取 payload 参数
   const payload = searchParams.get("payload");
 
@@ -40,13 +44,38 @@ export default function ShowPage() {
   }, [bookData, run]); // 添加依赖数组，防止无限执行
 
   useEffect(() => {
-    if (data && success && data.scenes) {
-      setAiCreactPicture(data.scenes.map((scene: any) => scene.picture));
+    if (data && success && data.scenes && !isGeneratingImages) {
+      console.log("scenes 数据结构:", data.scenes);
+      console.log("第一个场景:", data.scenes[0]);
+
+      setAiCreactPicture(
+        data.scenes.map((scene: any) => scene.img_text_prompt)
+      );
     }
-  }, [data, success, setAiCreactPicture]);
+  }, [data, success, setAiCreactPicture, isGeneratingImages]);
+
+  useEffect(() => {
+    console.log("aiCreactPicture", aiCreactPicture);
+    if (aiCreactPicture.length > 0) {
+      setIsGeneratingImages(true);
+      aiCreactPicture.forEach((prompt: string | null) => {
+        if (prompt) {
+        runAiCreactPicture({
+            prompt: prompt,
+            model: "dall-e-3",
+            size: "512x512",
+          });
+        }
+      });
+    }
+  }, [aiCreactPicture]);
 
   if (!bookData) {
     return <div>加载中...</div>;
+  }
+
+  if (isGeneratingImages) {
+    return <div>正在生成图片，请稍候...</div>;
   }
 
   console.log("aiCreactPicture", aiCreactPicture);

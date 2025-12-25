@@ -1,12 +1,11 @@
 import { create } from "zustand";
-import { PostAiCreactPicture } from "../_api/postAiCreactPicture";
 
 export interface ShowPageStore {
-  aiCreactPicture: PostAiCreactPicture[];
-  setAiCreactPicture: (aiCreactPicture: PostAiCreactPicture[]) => void;
+  aiCreactPicture: (string | null)[];
+  setAiCreactPicture: (aiCreactPicture: (string | null)[]) => void;
 }
 
 export const useShowPageStore = create<ShowPageStore>()((set) => ({
   aiCreactPicture: [],
-  setAiCreactPicture: (aiCreactPicture: PostAiCreactPicture[]) => set({ aiCreactPicture }),
+  setAiCreactPicture: (aiCreactPicture: (string | null)[]) => set({ aiCreactPicture }),
 }));
