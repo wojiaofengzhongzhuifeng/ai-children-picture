@@ -3,13 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
+import { useShowPageStore } from "./_store";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
   const searchParams = useSearchParams();
-  const { data, error, loading, run } = usePostFormListHooks();
+  const { data, error, loading, run, success } = usePostFormListHooks();
   const hasRunRef = useRef(false);
-
+  const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
   // 获取 payload 参数
   const payload = searchParams.get("payload");
 
@@ -38,13 +39,19 @@ export default function ShowPage() {
     });
   }, [bookData, run]); // 添加依赖数组，防止无限执行
 
+  useEffect(() => {
+    if (data && success && data.scenes) {
+      setAiCreactPicture(data.scenes.map((scene: any) => scene.picture));
+    }
+  }, [data, success, setAiCreactPicture]);
+
   if (!bookData) {
     return <div>加载中...</div>;
   }
 
-  console.log("bookData", bookData);
+  console.log("aiCreactPicture", aiCreactPicture);
   console.log("data", data);
-
+  console.log("bookData", bookData);
   return (
     <div>
       {/* 左侧页面列表 */}
