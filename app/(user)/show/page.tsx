@@ -1,25 +1,31 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
-import { StoryData, useShowPageStore, useStoryDataStore } from "./_store";
+import { useShowPageStore, useStoryDataStore } from "./_store";
 import { postAiCreactPicture } from "./_api/postAiCreactPicture";
 import { CopyIcon, DeleteIcon, EditIcon, SaveIcon } from "lucide-react";
 import { AddIcon, RefreshIcon } from "./icon";
 
+// 场景类型定义
+interface Scene {
+  text: string;
+  img_text_prompt: string;
+  imageUrl?: string | null;
+}
+
 export default function ShowPage() {
-  const [bookData, setBookData] = useState<any>(null);
   const searchParams = useSearchParams();
-  const { data, error, loading, run, success } = usePostFormListHooks();
+  const payload = searchParams.get("payload");
+  const [bookData, setBookData] = useState<any>(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [isGeneratingImages, setIsGeneratingImages] = useState(false);
   const hasRunRef = useRef(false);
   const hasStartedImageGeneration = useRef(false);
+  const { data, loading, run, success } = usePostFormListHooks();
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
-  const [isGeneratingImages, setIsGeneratingImages] = useState(false);
   const { storyData, setStoryData, updateSceneImage } = useStoryDataStore();
-  const [pageIndex, setPageIndex] = useState(0);
-  // 获取 payload 参数
-  const payload = searchParams.get("payload");
 
   useEffect(() => {
     if (!payload) return;
@@ -117,108 +123,98 @@ export default function ShowPage() {
     return <div>正在生成图片，请稍候...</div>;
   }
 
-  const currentScene = storyData?.data.scenes[pageIndex];
-  const totalPages = storyData?.data.scenes.length || 0;
-  console.log("pageIndex", pageIndex);
-  console.log("currentScene", currentScene);
-  console.log("img_text_prompt", currentScene?.img_text_prompt);
-  //生成页面列表
-  const picturePageList = storyData?.data.scenes.map(
-    (scene: any, index: number) => {
-      return (
-        <div
-          key={scene.id}
-          className="mb-4"
-          onClick={() => setPageIndex(index)}
-        >
-          <div
-            className={`bg-yellow-50 p-2 rounded-lg border-orange-300 border-solid border-4 hover:border-orange-400 cursor-pointer relative overflow-hidden ${
-              pageIndex === index ? "border-pink-500  ring-pink-300" : ""
-            }`}
-          >
-            <img
-              src={scene.imageUrl || ""}
-              className="w-full h-32 object-cover rounded-md"
-            />
-            <div className="absolute bottom-15 right-4 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm shadow-md">
-              {index + 1}
-            </div>
-            <div className="text-gray-700 text-sm mt-2 px-1 line-clamp-2">
-              {scene.text}
-            </div>
-          </div>
-        </div>
-      );
-    }
-  );
-  console.log("storyData", storyData);
+  // 当前选中的场景
+  const scenes = storyData?.data.scenes || [];
+  const currentScene = scenes[pageIndex] as Scene | undefined;
+  const totalPages = scenes.length;
 
   return (
     <div className="flex gap-2 h-screen">
       {/* 左侧页面列表 */}
       <div className="h-screen overflow-y-auto w-1/6">
-        <div className=" bg-white  border-blue-200 border-solid border-4 rounded-md p-4">
-          <h2 className="text-orange-500 text-2xl  mb-2">页面列表</h2>
+        <div className="bg-white border-blue-200 border-solid border-4 rounded-md p-4">
+          <h2 className="text-orange-500 text-2xl mb-2">页面列表</h2>
           <div className="text-orange-400 text-sm mb-4">共{totalPages}页</div>
           <hr className="border-gray-300 my-2" />
-          <div>
-            <div>
-              {picturePageList?.map((item: any, index: number) => (
-                <div key={index}>{item}</div>
-              ))}
-            </div>
-            <div className="sticky bottom-0 bg-white pt-2 mt-4 space-y-2 w-full">
-              <div className="mt-4 space-y-2 ">
-                <button className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors mt-4">
-                  <AddIcon />
-                  添加新页
-                </button>
-                <div className="flex gap-2">
-                  <button className="flex-1 flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-full hover:bg-blue-600 transition-colors">
-                    <CopyIcon className="w-4 h-4" />
-                    复制
-                  </button>
-                  <button className="flex-1 flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 transition-colors">
-                    <DeleteIcon className="w-4 h-4" />
-                    删除
-                  </button>
+
+          {/* 页面缩略图列表 */}
+          <div className="space-y-4">
+            {scenes.map((scene: Scene, index: number) => (
+              <div
+                key={index}
+                className={`bg-yellow-50 p-2 rounded-lg border-solid border-4 cursor-pointer relative overflow-hidden transition-all ${
+                  pageIndex === index
+                    ? "border-pink-500 ring-2 ring-pink-300"
+                    : "border-orange-300 hover:border-orange-400"
+                }`}
+                onClick={() => setPageIndex(index)}
+              >
+                <img
+                  src={scene.imageUrl || ""}
+                  alt={`第${index + 1}页`}
+                  className="w-full h-32 object-cover rounded-md"
+                />
+                <div className="absolute bottom-12 right-2 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm shadow-md">
+                  {index + 1}
+                </div>
+                <div className="text-gray-700 text-sm mt-2 px-1 line-clamp-2">
+                  {scene.text}
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* 底部操作按钮 */}
+          <div className="sticky bottom-0 bg-white pt-4 mt-4 space-y-2">
+            <button className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors">
+              <AddIcon />
+              添加新页
+            </button>
+            <div className="flex gap-2">
+              <button className="flex-1 flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-full hover:bg-blue-600 transition-colors">
+                <CopyIcon className="w-4 h-4" />
+                复制
+              </button>
+              <button className="flex-1 flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 transition-colors">
+                <DeleteIcon className="w-4 h-4" />
+                删除
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 中间绘画图片 */}
-      <div className="w-5/7 bg-white border-blue-200 border-solid border-4 rounded-md p-4s h-screen">
+      {/* 中间预览区域 */}
+      <div className="w-5/7 bg-white border-blue-200 border-solid border-4 rounded-md p-4 h-screen overflow-y-auto">
         {/* 头部 */}
         <div className="flex justify-between border-b-2 border-pink-300 pb-2 pt-2 items-center">
-          <div>👁 预览区域</div>
+          <div className="font-medium">👁 预览区域</div>
           <div className="flex gap-2 items-center">
             <div className="text-pink-500 text-sm">
               第{pageIndex + 1}/{totalPages}页
             </div>
-            <button className="bg-green-500 text-white px-2 py-1 mr-2 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm">
+            <button className="bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm">
               <SaveIcon className="w-4 h-4" />
               保存
             </button>
           </div>
         </div>
-        {/* 内容 */}
+
+        {/* 预览内容 */}
         <div className="flex justify-center mt-4">
-          <div className="w-3/7 flex flex-col gap-4">
+          <div className="w-3/5 flex flex-col gap-4">
             {/* 图片区域 */}
-            <div className="border-2 border-gray-300 rounded-md p-4 bg-gray-200 h-[calc(100vh-200px)]">
+            <div className="border-4 border-orange-300 rounded-md p-4 bg-gray-200 shadow-lg">
               <img
                 src={currentScene?.imageUrl || ""}
-                alt="预览图片"
+                alt={`第${pageIndex + 1}页预览`}
                 className="w-full h-auto object-cover rounded-md"
               />
             </div>
             {/* 文字区域 */}
-            <div className="  border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2">
-              <EditIcon className="w-4 h-4 " />
-              {currentScene?.text}
+            <div className="border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2">
+              <EditIcon className="w-4 h-4 shrink-0" />
+              <span>{currentScene?.text || "暂无文字"}</span>
             </div>
           </div>
         </div>
@@ -233,7 +229,7 @@ export default function ShowPage() {
             <div className="text-orange-500 text-sm mb-2">图片提示词</div>
             <textarea
               key={pageIndex}
-              className="w-full border-2 border-gray-300 rounded-md p-2 flex-1 resize-none min-h-[200px]"
+              className="w-full border-4 border-yellow-300 rounded-md p-2 flex-1 resize-none min-h-[200px]"
               value={currentScene?.img_text_prompt || ""}
               readOnly
             />
