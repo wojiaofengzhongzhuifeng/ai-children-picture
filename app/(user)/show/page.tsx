@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
 import { StoryData, useShowPageStore, useStoryDataStore } from "./_store";
 import { postAiCreactPicture } from "./_api/postAiCreactPicture";
+import { CopyIcon, DeleteIcon, EditIcon, SaveIcon } from "lucide-react";
+import { AddIcon, RefreshIcon } from "./icon";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
@@ -15,6 +17,7 @@ export default function ShowPage() {
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
   const [isGeneratingImages, setIsGeneratingImages] = useState(false);
   const { storyData, setStoryData, updateSceneImage } = useStoryDataStore();
+  const [pageIndex, setPageIndex] = useState(0);
   // 获取 payload 参数
   const payload = searchParams.get("payload");
 
@@ -114,25 +117,141 @@ export default function ShowPage() {
     return <div>正在生成图片，请稍候...</div>;
   }
 
+  const currentScene = storyData?.data.scenes[pageIndex];
+  const totalPages = storyData?.data.scenes.length || 0;
+  console.log("pageIndex", pageIndex);
+  console.log("currentScene", currentScene);
+  console.log("img_text_prompt", currentScene?.img_text_prompt);
+  //生成页面列表
+  const picturePageList = storyData?.data.scenes.map(
+    (scene: any, index: number) => {
+      return (
+        <div
+          key={scene.id}
+          className="mb-4"
+          onClick={() => setPageIndex(index)}
+        >
+          <div
+            className={`bg-yellow-50 p-2 rounded-lg border-orange-300 border-solid border-4 hover:border-orange-400 cursor-pointer relative overflow-hidden ${
+              pageIndex === index ? "border-pink-500  ring-pink-300" : ""
+            }`}
+          >
+            <img
+              src={scene.imageUrl || ""}
+              className="w-full h-32 object-cover rounded-md"
+            />
+            <div className="absolute bottom-15 right-4 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm shadow-md">
+              {index + 1}
+            </div>
+            <div className="text-gray-700 text-sm mt-2 px-1 line-clamp-2">
+              {scene.text}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  );
   console.log("storyData", storyData);
+
   return (
-    <div>
+    <div className="flex gap-2 h-screen">
       {/* 左侧页面列表 */}
-      <div className="w-1/7 bg-white  border-blue-200 border-solid border-4 rounded-md p-4">
-        <h2 className="text-orange-500 text-2xl  mb-2">页面列表</h2>
-        <div className="text-orange-400 text-sm mb-4">共10页</div>
-        <hr className="border-gray-300 my-2" />
-        <div>
-          <div className="bg-yellow-100 p-2 rounded-md border-orange-200 border-solid border-4 hover:border-orange-300 cursor-pointer h-40 relative">
-            <div className="absolute bottom-2 right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white  text-sm shadow-md">
-              1
+      <div className="h-screen overflow-y-auto w-1/6">
+        <div className=" bg-white  border-blue-200 border-solid border-4 rounded-md p-4">
+          <h2 className="text-orange-500 text-2xl  mb-2">页面列表</h2>
+          <div className="text-orange-400 text-sm mb-4">共{totalPages}页</div>
+          <hr className="border-gray-300 my-2" />
+          <div>
+            <div>
+              {picturePageList?.map((item: any, index: number) => (
+                <div key={index}>{item}</div>
+              ))}
+            </div>
+            <div className="sticky bottom-0 bg-white pt-2 mt-4 space-y-2 w-full">
+              <div className="mt-4 space-y-2 ">
+                <button className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors mt-4">
+                  <AddIcon />
+                  添加新页
+                </button>
+                <div className="flex gap-2">
+                  <button className="flex-1 flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-full hover:bg-blue-600 transition-colors">
+                    <CopyIcon className="w-4 h-4" />
+                    复制
+                  </button>
+                  <button className="flex-1 flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 transition-colors">
+                    <DeleteIcon className="w-4 h-4" />
+                    删除
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      {/* 中间绘画图片 */}
 
+      {/* 中间绘画图片 */}
+      <div className="w-5/7 bg-white border-blue-200 border-solid border-4 rounded-md p-4s h-screen">
+        {/* 头部 */}
+        <div className="flex justify-between border-b-2 border-pink-300 pb-2 pt-2 items-center">
+          <div>👁 预览区域</div>
+          <div className="flex gap-2 items-center">
+            <div className="text-pink-500 text-sm">
+              第{pageIndex + 1}/{totalPages}页
+            </div>
+            <button className="bg-green-500 text-white px-2 py-1 mr-2 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm">
+              <SaveIcon className="w-4 h-4" />
+              保存
+            </button>
+          </div>
+        </div>
+        {/* 内容 */}
+        <div className="flex justify-center mt-4">
+          <div className="w-3/7 flex flex-col gap-4">
+            {/* 图片区域 */}
+            <div className="border-2 border-gray-300 rounded-md p-4 bg-gray-200 h-[calc(100vh-200px)]">
+              <img
+                src={currentScene?.imageUrl || ""}
+                alt="预览图片"
+                className="w-full h-auto object-cover rounded-md"
+              />
+            </div>
+            {/* 文字区域 */}
+            <div className="  border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2">
+              <EditIcon className="w-4 h-4 " />
+              {currentScene?.text}
+            </div>
+          </div>
+        </div>
+      </div>
       {/* 右侧编辑内容 */}
+      <div className="h-screen w-1/6">
+        <div className="bg-white border-green-200 border-solid border-4 rounded-md p-4 h-full flex flex-col">
+          <h2 className="text-orange-500 text-2xl mb-2">🖊编辑属性</h2>
+          <div className="text-orange-400 text-sm mb-4">正在编辑图片</div>
+          <hr className="border-gray-300 my-2" />
+          <div className="flex-1 flex flex-col">
+            <div className="text-orange-500 text-sm mb-2">图片提示词</div>
+            <textarea
+              key={pageIndex}
+              className="w-full border-2 border-gray-300 rounded-md p-2 flex-1 resize-none min-h-[200px]"
+              value={currentScene?.img_text_prompt || ""}
+              readOnly
+            />
+          </div>
+          <button
+            className="bg-blue-500 text-white px-2 py-2 mt-4 rounded-md justify-center
+           hover:bg-blue-600 transition-colors flex items-center gap-1 text-sm w-full text-center"
+          >
+            <RefreshIcon /> 重新生成图片
+          </button>
+          <div className="border-2 border-blue-300 rounded-md p-2 mt-4 text-blue-500 bg-blue-50">
+            <div>💡提示</div>
+            <div>
+              点击中间预览区的图片可以选择并编辑它。修改提示词后点击重新生成。
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
