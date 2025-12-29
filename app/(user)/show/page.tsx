@@ -3,18 +3,18 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
-import { useShowPageStore } from "./_store";
+import { StoryData, useShowPageStore, useStoryDataStore } from "./_store";
 import { postAiCreactPicture } from "./_api/postAiCreactPicture";
-import { usePostAiCreactPitureHooks } from "./_hooks/postAiCreactPitureHooks";
 
 export default function ShowPage() {
   const [bookData, setBookData] = useState<any>(null);
   const searchParams = useSearchParams();
   const { data, error, loading, run, success } = usePostFormListHooks();
   const hasRunRef = useRef(false);
+  const hasStartedImageGeneration = useRef(false);
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
   const [isGeneratingImages, setIsGeneratingImages] = useState(false);
-  const { run: runAiCreactPicture, data: aiCreactPictureData } = usePostAiCreactPitureHooks();
+  const { storyData, setStoryData, updateSceneImage } = useStoryDataStore();
   // 获取 payload 参数
   const payload = searchParams.get("payload");
 
@@ -45,9 +45,6 @@ export default function ShowPage() {
 
   useEffect(() => {
     if (data && success && data.scenes && !isGeneratingImages) {
-      console.log("scenes 数据结构:", data.scenes);
-      console.log("第一个场景:", data.scenes[0]);
-
       setAiCreactPicture(
         data.scenes.map((scene: any) => scene.img_text_prompt)
       );
@@ -55,20 +52,59 @@ export default function ShowPage() {
   }, [data, success, setAiCreactPicture, isGeneratingImages]);
 
   useEffect(() => {
-    console.log("aiCreactPicture", aiCreactPicture);
-    if (aiCreactPicture.length > 0) {
+    if (aiCreactPicture.length > 0 && !hasStartedImageGeneration.current) {
+      hasStartedImageGeneration.current = true;
       setIsGeneratingImages(true);
-      aiCreactPicture.forEach((prompt: string | null) => {
-        if (prompt) {
-        runAiCreactPicture({
-            prompt: prompt,
-            model: "dall-e-3",
-            size: "512x512",
-          });
+
+      // 使用 forEach 带 index，并直接调用 API
+      const promises = aiCreactPicture.map(
+        async (prompt: string | null, index: number) => {
+          if (prompt) {
+            try {
+              const response = await postAiCreactPicture({
+                prompt: prompt,
+                model: "dall-e-3",
+                size: "512x512",
+              });
+
+              // 获取图片 URL 并保存到 Store
+              if (response.success && response.data) {
+                const imageUrl = response.data.url || response.data;
+                updateSceneImage(index, imageUrl);
+                console.log(`场景 ${index} 图片保存成功:`, imageUrl);
+              }
+            } catch (error) {
+              console.error(`场景 ${index} 图片生成失败:`, error);
+            }
+          }
         }
+      );
+      Promise.all(promises).then(() => {
+        setIsGeneratingImages(false);
       });
     }
-  }, [aiCreactPicture]);
+  }, [aiCreactPicture, updateSceneImage]);
+
+  useEffect(() => {
+    if (bookData && data && data.scenes) {
+      setStoryData({
+        id: Date.now(), // 或者使用其他唯一 ID
+        data: {
+          child_age: bookData.child_age,
+          illustration_style_label: bookData.illustration_style,
+          story_overview: bookData.story_overview,
+          central_idea: bookData.central_idea,
+          themes: bookData.themes,
+          usage: data.usage || {
+            completion_tokens: 0,
+            prompt_tokens: 0,
+            total_tokens: 0,
+          },
+          scenes: data.scenes, // AI 返回的场景数据
+        },
+      });
+    }
+  }, [bookData, data]);
 
   if (!bookData) {
     return <div>加载中...</div>;
@@ -78,9 +114,7 @@ export default function ShowPage() {
     return <div>正在生成图片，请稍候...</div>;
   }
 
-  console.log("aiCreactPicture", aiCreactPicture);
-  console.log("data", data);
-  console.log("bookData", bookData);
+  console.log("storyData", storyData);
   return (
     <div>
       {/* 左侧页面列表 */}
