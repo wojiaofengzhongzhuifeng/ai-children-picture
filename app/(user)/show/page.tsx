@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
 import { useShowPageStore, useStoryDataStore } from "./_store";
 import { postAiCreactPicture } from "./_api/postAiCreactPicture";
@@ -18,6 +18,7 @@ interface Scene {
 
 export default function ShowPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const payload = searchParams.get("payload");
   const [bookData, setBookData] = useState<any>(null);
   const [pageIndex, setPageIndex] = useState(0);
@@ -133,6 +134,21 @@ export default function ShowPage() {
     return <div>正在生成图片，请稍候...</div>;
   }
 
+
+  const handleSave = () => {
+    if (!storyData) return;
+    // 保存到 localStorage
+    const savedBooks = localStorage.getItem("myLibrary");
+    const books = savedBooks ? JSON.parse(savedBooks) : [];
+    const newBook = {
+      ...storyData,
+      createdAt: new Date().toISOString(),
+    };
+    books.push(newBook);
+    localStorage.setItem("myLibrary", JSON.stringify(books));
+    router.push("/myLibrary");
+  };
+
   // 当前选中的场景
   const scenes = storyData?.data.scenes || [];
   const currentScene = scenes[pageIndex] as Scene | undefined;
@@ -221,7 +237,12 @@ export default function ShowPage() {
             <div className="text-pink-500 text-sm">
               第{pageIndex + 1}/{totalPages}页
             </div>
-            <button className="bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm">
+            <button
+              className="bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm"
+              onClick={() => 
+                handleSave()
+              }
+            >
               <SaveIcon className="w-4 h-4" />
               保存
             </button>
