@@ -15,6 +15,7 @@ export interface StoryDataStore {
   storyData: StoryData | null;
   setStoryData: (storyData: StoryData | null) => void;
   updateSceneImage: (index: number, imageUrl: string) => void;
+  updateScenePrompt: (index: number, prompt: string) => void;
 }
 
 export interface StoryData {
@@ -48,6 +49,21 @@ export const useStoryDataStore = create<StoryDataStore>()((set) => ({
       const newScenes = [...state.storyData.data.scenes];
       if (newScenes[index]) {
         newScenes[index].imageUrl = imageUrl;
+      }
+      return {
+        storyData: {
+          ...state.storyData,
+          data: { ...state.storyData.data, scenes: newScenes },
+        },
+      };
+    }),
+
+  updateScenePrompt: (index: number, prompt: string) =>
+    set((state) => {
+      if (!state.storyData) return state;
+      const newScenes = [...state.storyData.data.scenes];
+      if (newScenes[index]) {
+        newScenes[index].img_text_prompt = prompt;
       }
       return {
         storyData: {

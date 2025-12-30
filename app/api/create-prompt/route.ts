@@ -51,35 +51,35 @@ const MOCK_RESPONSE = {
   scenes: [
     {
       text: "小猫在花园里找到了一篮子美味的食物。123321321",
-      img_text_prompt: "a small fluffy grey cat, round eyes with green pupils, short sleek fur, sitting on a soft green grass, in a colorful garden filled with flowers, holding a basket of colorful fruits and vegetables, feeling happy and excited, wide shot, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第一条提示词"
     },
     {
       text: "小猫看着篮子里的食物，想起了它的好朋友小狗。",
-      img_text_prompt: "a small fluffy grey cat, round eyes with green pupils, short sleek fur, sitting on a soft green grass, in a colorful garden filled with flowers, looking into the basket with a thoughtfull expression, feeling nostalgic, medium shot, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第二条提示词"
     },
     {
       text: "小猫决定把食物分成两份，一份给自己，一份给小狗。",
-      img_text_prompt: "a small fluffy grey cat, round eyes with green pupils, short sleek fur, sitting on a soft green grass, in a colorful garden filled with flowers, carefully dividing the basket into two, one part for itself and one part for a small fluffy brown dog, feeling generous and kind, close-up, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第三条提示词"
     },
     {
       text: "小猫和小狗一起分享了美味的食物，感到非常快乐。",
-      img_text_prompt: "a small fluffy grey cat and a small fluffy brown dog, both with round eyes, short sleek fur, sitting together on the grass, sharing the basket of colorful fruits and vegetables, looking at each other with big smiles, feeling joyful and content, medium shot, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第四条提示词"
     },
     {
       text: "小猫学会了分享，它感到非常自豪。",
-      img_text_prompt: "a small fluffy grey cat, round eyes with green pupils, short sleek fur, sitting proudly on the grass, looking at the shared food with a satisfied expression, feeling proud and happy, close-up, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第五条提示词"
     },
     {
       text: "小狗也学会了分享，它把它的玩具给小猫玩。",
-      img_text_prompt: "a small fluffy grey cat and a small fluffy brown dog, both with round eyes, short sleek fur, sitting together on the grass, the dog giving a small plush toy to the cat, both feeling happy and sharing, medium shot, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第六条提示词"
     },
     {
       text: "小猫和小狗成为了最好的朋友，一起玩耍。",
-      img_text_prompt: "a small fluffy grey cat and a small fluffy brown dog, both with round eyes, short sleek fur, playing together in the garden, the cat playing with the dog's tail, both having fun, wide shot, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第七条提示词"
     },
     {
       text: "小猫和小狗一起度过了美好的时光，它们学会了分享的重要性。",
-      img_text_prompt: "a small fluffy grey cat and a small fluffy brown dog, both with round eyes, short sleek fur, sitting together on the grass, looking at each other with smiles, feeling grateful and happy, close-up, centered composition, eye-level view, children crayon drawing style, bold colorful strokes, textured lines, vibrant colors, hand-drawn feel, playful scribbles, children's picture book illustration, masterpiece, best quality, highly detailed"
+      img_text_prompt: "第八条提示词"
     }
   ],
   sceneCount: 8,

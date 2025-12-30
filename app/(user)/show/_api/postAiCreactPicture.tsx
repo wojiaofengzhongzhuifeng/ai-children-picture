@@ -4,6 +4,7 @@ export interface PostAiCreactPicture {
     prompt: string;
     model: string;
     size: string;
+    sceneIndex?: number;
 }
 
 const postAiCreactPictureApiConfig: ApiConfig = {

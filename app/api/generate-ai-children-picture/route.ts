@@ -13,14 +13,11 @@ const MOCK_IMAGES = [
   '/images/ai-children/1766569619677-8ts6gh.png'
 ]
 
-// Mock 图片索引计数器（用于循环返回不同图片）
-let mockImageIndex = 0
-
 // 生成 Mock 响应
-function getMockResponse(prompt: string, negativePrompt?: string, size?: string) {
-  // 循环使用测试图片
-  const imageUrl = MOCK_IMAGES[mockImageIndex % MOCK_IMAGES.length]
-  mockImageIndex++
+function getMockResponse(prompt: string, negativePrompt?: string, size?: string, sceneIndex?: number) {
+  // 根据 sceneIndex 返回对应图片，保证顺序稳定
+  const index = sceneIndex !== undefined ? sceneIndex : 0
+  const imageUrl = MOCK_IMAGES[index % MOCK_IMAGES.length]
 
   // 解析尺寸
   let width = 1024
@@ -55,7 +52,7 @@ export async function POST(request: NextRequest) {
   try {
     // 1. 解析请求参数
     const body = await request.json()
-    const { prompt, negativePrompt, model, size } = body
+    const { prompt, negativePrompt, model, size, sceneIndex } = body
 
     // 检查是否使用 Mock 数据（忽略大小写和空格）
     if (process.env.USE_MOCK_DATA?.toLowerCase().trim() === 'true') {
@@ -72,7 +69,7 @@ export async function POST(request: NextRequest) {
       // 模拟一定的延迟（500ms-1500ms）
       await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500))
       
-      return NextResponse.json(getMockResponse(prompt, negativePrompt, size))
+      return NextResponse.json(getMockResponse(prompt, negativePrompt, size, sceneIndex))
     }
 
     // 2. 参数验证

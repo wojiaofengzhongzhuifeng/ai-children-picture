@@ -7,6 +7,7 @@ import { useShowPageStore, useStoryDataStore } from "./_store";
 import { postAiCreactPicture } from "./_api/postAiCreactPicture";
 import { CopyIcon, DeleteIcon, EditIcon, SaveIcon } from "lucide-react";
 import { AddIcon, RefreshIcon } from "./icon";
+import { usePostAiCreactPitureHooks } from "./_hooks/postAiCreactPitureHooks";
 
 // 场景类型定义
 interface Scene {
@@ -25,7 +26,9 @@ export default function ShowPage() {
   const hasStartedImageGeneration = useRef(false);
   const { data, loading, run, success } = usePostFormListHooks();
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
-  const { storyData, setStoryData, updateSceneImage } = useStoryDataStore();
+  const { storyData, setStoryData, updateSceneImage, updateScenePrompt } =
+    useStoryDataStore();
+  const postAiCreactPictureHooks = usePostAiCreactPitureHooks();
 
   useEffect(() => {
     if (!payload) return;
@@ -74,13 +77,13 @@ export default function ShowPage() {
                 prompt: prompt,
                 model: "dall-e-3",
                 size: "512x512",
+                sceneIndex: index,
               });
 
               // 获取图片 URL 并保存到 Store
               if (response.success && response.data) {
-                const imageUrl = response.data.url || response.data;
+                const imageUrl = response.data.imageUrl;
                 updateSceneImage(index, imageUrl);
-                console.log(`场景 ${index} 图片保存成功:`, imageUrl);
               }
             } catch (error) {
               console.error(`场景 ${index} 图片生成失败:`, error);
@@ -128,6 +131,8 @@ export default function ShowPage() {
   const currentScene = scenes[pageIndex] as Scene | undefined;
   const totalPages = scenes.length;
 
+
+  console.log("storyData", storyData);
   return (
     <div className="flex gap-2 h-screen">
       {/* 左侧页面列表 */}
@@ -154,7 +159,7 @@ export default function ShowPage() {
                   alt={`第${index + 1}页`}
                   className="w-full h-32 object-cover rounded-md"
                 />
-                <div className="absolute bottom-12 right-2 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm shadow-md">
+                <div className="absolute bottom-15 right-2 w-7 h-7 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm shadow-md">
                   {index + 1}
                 </div>
                 <div className="text-gray-700 text-sm mt-2 px-1 line-clamp-2">
@@ -231,12 +236,21 @@ export default function ShowPage() {
               key={pageIndex}
               className="w-full border-4 border-yellow-300 rounded-md p-2 flex-1 resize-none min-h-[200px]"
               value={currentScene?.img_text_prompt || ""}
-              readOnly
+              onChange={(e) => {
+                updateScenePrompt(pageIndex, e.target.value);
+              }}
             />
           </div>
           <button
             className="bg-blue-500 text-white px-2 py-2 mt-4 rounded-md justify-center
            hover:bg-blue-600 transition-colors flex items-center gap-1 text-sm w-full text-center"
+            onClick={() => {
+              postAiCreactPictureHooks.run({
+                prompt: currentScene?.img_text_prompt || "",
+                model: "dall-e-3",
+                size: "512x512",
+              });
+            }}
           >
             <RefreshIcon /> 重新生成图片
           </button>
