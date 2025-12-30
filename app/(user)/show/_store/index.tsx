@@ -16,6 +16,16 @@ export interface StoryDataStore {
   setStoryData: (storyData: StoryData | null) => void;
   updateSceneImage: (index: number, imageUrl: string) => void;
   updateScenePrompt: (index: number, prompt: string) => void;
+  insertScene: (
+    index: number,
+    scene: {
+      text: string;
+      img_text_prompt: string;
+      imageUrl?: string | null;
+    }
+  ) => void;
+  deleteScene: (index: number) => void;
+  copyScene: (index: number) => void;
 }
 
 export interface StoryData {
@@ -65,6 +75,53 @@ export const useStoryDataStore = create<StoryDataStore>()((set) => ({
       if (newScenes[index]) {
         newScenes[index].img_text_prompt = prompt;
       }
+      return {
+        storyData: {
+          ...state.storyData,
+          data: { ...state.storyData.data, scenes: newScenes },
+        },
+      };
+    }),
+
+  insertScene: (
+    index: number,
+    scene: {
+      text: string;
+      img_text_prompt: string;
+      imageUrl?: string | null;
+    }
+  ) =>
+    set((state) => {
+      if (!state.storyData) return state;
+      const newScenes = [...state.storyData.data.scenes];
+      // 在 index 后面插入新场景
+      newScenes.splice(index + 1, 0, scene);
+      return {
+        storyData: {
+          ...state.storyData,
+          data: { ...state.storyData.data, scenes: newScenes },
+        },
+      };
+    }),
+
+  deleteScene: (index: number) =>
+    set((state) => {
+      if (!state.storyData) return state;
+      const newScenes = [...state.storyData.data.scenes];
+      newScenes.splice(index, 1);
+      return {
+        storyData: {
+          ...state.storyData,
+          data: { ...state.storyData.data, scenes: newScenes },
+        },
+      };
+    }),
+
+  copyScene: (index: number) =>
+    set((state) => {
+      if (!state.storyData) return state;
+      const newScenes = [...state.storyData.data.scenes];
+      newScenes.splice(index, 0, newScenes[index]);
       return {
         storyData: {
           ...state.storyData,

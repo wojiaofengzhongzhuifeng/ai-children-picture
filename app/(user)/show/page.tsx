@@ -26,8 +26,15 @@ export default function ShowPage() {
   const hasStartedImageGeneration = useRef(false);
   const { data, loading, run, success } = usePostFormListHooks();
   const { aiCreactPicture, setAiCreactPicture } = useShowPageStore();
-  const { storyData, setStoryData, updateSceneImage, updateScenePrompt } =
-    useStoryDataStore();
+  const {
+    storyData,
+    setStoryData,
+    updateSceneImage,
+    updateScenePrompt,
+    insertScene,
+    deleteScene,
+    copyScene,
+  } = useStoryDataStore();
   const postAiCreactPictureHooks = usePostAiCreactPitureHooks();
 
   useEffect(() => {
@@ -131,7 +138,6 @@ export default function ShowPage() {
   const currentScene = scenes[pageIndex] as Scene | undefined;
   const totalPages = scenes.length;
 
-
   console.log("storyData", storyData);
   return (
     <div className="flex gap-2 h-screen">
@@ -171,16 +177,33 @@ export default function ShowPage() {
 
           {/* 底部操作按钮 */}
           <div className="sticky bottom-0 bg-white pt-4 mt-4 space-y-2">
-            <button className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors">
+            <button
+              className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors"
+              onClick={() => {
+                insertScene(pageIndex, {
+                  text: "新页面文字内容",
+                  img_text_prompt: "请输入图片提示词",
+                  imageUrl: null,
+                });
+                // 跳转到新插入的页面（当前页的下一页）
+                setPageIndex(pageIndex + 1);
+              }}
+            >
               <AddIcon />
               添加新页
             </button>
             <div className="flex gap-2">
-              <button className="flex-1 flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-full hover:bg-blue-600 transition-colors">
+              <button
+                className="flex-1 flex items-center justify-center gap-1 bg-blue-500 text-white px-3 py-2 rounded-full hover:bg-blue-600 transition-colors"
+                onClick={() => copyScene(pageIndex)}
+              >
                 <CopyIcon className="w-4 h-4" />
                 复制
               </button>
-              <button className="flex-1 flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 transition-colors">
+              <button
+                className="flex-1 flex items-center justify-center gap-1 bg-red-500 text-white px-3 py-2 rounded-full hover:bg-red-600 transition-colors"
+                onClick={() => deleteScene(pageIndex)}
+              >
                 <DeleteIcon className="w-4 h-4" />
                 删除
               </button>
