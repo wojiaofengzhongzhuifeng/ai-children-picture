@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
 import { useShowPageStore, useStoryDataStore } from "./_store";
@@ -31,12 +31,14 @@ export default function ShowPage() {
     storyData,
     setStoryData,
     updateSceneImage,
-    updateScenePrompt,
+    updateSceneImagePrompt,
+    updateSceneText,
     insertScene,
     deleteScene,
     copyScene,
   } = useStoryDataStore();
   const postAiCreactPictureHooks = usePostAiCreactPitureHooks();
+  const [editPosition, setEditPosition] = useState<"photos" | "text">("photos");
 
   useEffect(() => {
     if (!payload) return;
@@ -134,7 +136,6 @@ export default function ShowPage() {
     return <div>正在生成图片，请稍候...</div>;
   }
 
-
   const handleSave = () => {
     if (!storyData) return;
     // 保存到 localStorage
@@ -147,6 +148,10 @@ export default function ShowPage() {
     books.push(newBook);
     localStorage.setItem("myLibrary", JSON.stringify(books));
     router.push("/myLibrary");
+  };
+
+  const handleEditPosition = (e: "photos" | "text") => {
+    setEditPosition(e);
   };
 
   // 当前选中的场景
@@ -239,9 +244,7 @@ export default function ShowPage() {
             </div>
             <button
               className="bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors flex items-center gap-1 text-sm"
-              onClick={() => 
-                handleSave()
-              }
+              onClick={() => handleSave()}
             >
               <SaveIcon className="w-4 h-4" />
               保存
@@ -258,10 +261,14 @@ export default function ShowPage() {
                 src={currentScene?.imageUrl || ""}
                 alt={`第${pageIndex + 1}页预览`}
                 className="w-full h-auto object-cover rounded-md"
+                onClick={() => handleEditPosition("photos")}
               />
             </div>
             {/* 文字区域 */}
-            <div className="border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2">
+            <div
+              className="border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2"
+              onClick={() => handleEditPosition("text")}
+            >
               <EditIcon className="w-4 h-4 shrink-0" />
               <span>{currentScene?.text || "暂无文字"}</span>
             </div>
@@ -272,38 +279,75 @@ export default function ShowPage() {
       <div className="h-screen w-1/6">
         <div className="bg-white border-green-200 border-solid border-4 rounded-md p-4 h-full flex flex-col">
           <h2 className="text-orange-500 text-2xl mb-2">🖊编辑属性</h2>
-          <div className="text-orange-400 text-sm mb-4">正在编辑图片</div>
+          <div className="text-orange-400 text-sm mb-4">
+            {" "}
+            正在编辑{editPosition === "photos" ? "图片" : "文字"}
+          </div>
           <hr className="border-gray-300 my-2" />
-          <div className="flex-1 flex flex-col">
-            <div className="text-orange-500 text-sm mb-2">图片提示词</div>
-            <textarea
-              key={pageIndex}
-              className="w-full border-4 border-yellow-300 rounded-md p-2 flex-1 resize-none min-h-[200px]"
-              value={currentScene?.img_text_prompt || ""}
-              onChange={(e) => {
-                updateScenePrompt(pageIndex, e.target.value);
-              }}
-            />
-          </div>
-          <button
-            className="bg-blue-500 text-white px-2 py-2 mt-4 rounded-md justify-center
-           hover:bg-blue-600 transition-colors flex items-center gap-1 text-sm w-full text-center"
-            onClick={() => {
-              postAiCreactPictureHooks.run({
-                prompt: currentScene?.img_text_prompt || "",
-                model: "dall-e-3",
-                size: "512x512",
-              });
-            }}
-          >
-            <RefreshIcon /> 重新生成图片
-          </button>
-          <div className="border-2 border-blue-300 rounded-md p-2 mt-4 text-blue-500 bg-blue-50">
-            <div>💡提示</div>
-            <div>
-              点击中间预览区的图片可以选择并编辑它。修改提示词后点击重新生成。
+
+          {editPosition === "photos" ? (
+            <>
+              <div className="text-orange-500 text-sm mb-2  ">图片提示词</div>
+              <textarea
+                value={currentScene?.img_text_prompt || ""}
+                onChange={(e) =>
+                  updateSceneImagePrompt(pageIndex, e.target.value)
+                }
+                className="border-4 border-yellow-300 rounded-md p-2 h-64"
+              />
+              <button
+                onClick={() => {
+                  postAiCreactPictureHooks.run({
+                    prompt: currentScene?.img_text_prompt || "",
+                    model: "dall-e-3",
+                    size: "512x512",
+                  });
+                }}
+                className="bg-blue-500 text-white px-3 py-2 mt-2 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-1 text-sm w-full justify-center"
+              >
+                <RefreshIcon />
+                重新生成图片
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="text-orange-500 text-sm mb-2">文字内容</div>
+              <textarea
+                value={currentScene?.text || ""}
+                onChange={(e) => updateSceneText(pageIndex, e.target.value)}
+                className="border-4 border-yellow-300 rounded-md p-2 h-64"
+              />
+              <button
+                onClick={() => {
+                  postAiCreactPictureHooks.run({
+                    prompt: currentScene?.text || "",
+                    model: "dall-e-3",
+                    size: "512x512",
+                  });
+                }}
+                className="bg-orange-500 text-white px-3 py-2 mt-2 rounded-full hover:bg-orange-600 transition-colors flex items-center gap-1 text-sm w-full justify-center"
+              >
+                <RefreshIcon />
+                重新生成文字
+              </button>
+            </>
+          )}
+          {editPosition === "photos" && (
+            <div className="border-2 border-blue-300 rounded-md p-2 mt-4 text-blue-500 bg-blue-50">
+              <div>💡提示</div>
+              <div>
+                点击中间预览区的图片可以选择并编辑它。修改提示词后点击重新生成。
+              </div>
             </div>
-          </div>
+          )}
+          {editPosition === "text" && (
+            <div className="border-2 border-orange-300 rounded-md p-2 mt-4 text-orange-500 bg-orange-50">
+              <div>💡提示</div>
+              <div>
+                简单文字应该简短、有力，适合儿童快速理解。建议使用 8-15 个字。
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
