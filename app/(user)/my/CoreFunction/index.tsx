@@ -1,4 +1,4 @@
-import { Section, HeroSection, FeatureCard, PageWrapper } from "./style";
+import { Section, HeroSection, FeatureCard, PageWrapper } from './style';
 import {
   ArtisticIcon,
   ArtisticTickIcon,
@@ -6,7 +6,7 @@ import {
   IntelligentTickIcon,
   ProfessionalIcon,
   ProfessionalTickIcon,
-} from "@/app/(user)/my/icon";
+} from '@/app/(user)/my/icon';
 
 export default function CoreFeatures() {
   return (

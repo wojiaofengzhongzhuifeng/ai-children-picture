@@ -1,17 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
-  let res = NextResponse.next()
+  let res = NextResponse.next();
 
   // 临时移除 Supabase 初始化以避免无效 URL 错误
   // 如果需要恢复认证功能，请配置正确的 Supabase URL
-  let session = null
+  let session = null;
 
   // 只有在 Supabase URL 配置正确时才初始化客户端
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+  if (
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
+  ) {
     try {
       const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -19,43 +21,43 @@ export async function middleware(req: NextRequest) {
         {
           cookies: {
             get(name) {
-              return req.cookies.get(name)?.value
+              return req.cookies.get(name)?.value;
             },
             set(name, value, options) {
-              req.cookies.set(name, value)
+              req.cookies.set(name, value);
               res = NextResponse.next({
                 request: {
                   headers: req.headers,
                 },
-              })
+              });
               res.cookies.set({
                 name,
                 value,
                 ...options,
-              })
+              });
             },
             remove(name, options) {
-              req.cookies.set(name, '')
+              req.cookies.set(name, '');
               res = NextResponse.next({
                 request: {
                   headers: req.headers,
                 },
-              })
+              });
               res.cookies.set({
                 name,
                 value: '',
                 ...options,
-              })
+              });
             },
           },
         }
-      )
+      );
 
-      const result = await supabase.auth.getSession()
-      session = result.data.session
+      const result = await supabase.auth.getSession();
+      session = result.data.session;
     } catch (error) {
-      console.warn('Supabase initialization failed:', error)
-      session = null
+      console.warn('Supabase initialization failed:', error);
+      session = null;
     }
   }
 
@@ -81,11 +83,11 @@ export async function middleware(req: NextRequest) {
   //   return NextResponse.redirect(new URL('/', req.url))
   // }
 
-  return res
+  return res;
 }
 
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
-}
+};

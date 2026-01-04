@@ -57,18 +57,18 @@ fetch('/api/generate-ai-children-picture', {
     prompt: '一只可爱的小猫',
     negativePrompt: '模糊、低质量',
     model: 'cogview-4',
-    size: '1024x1024'
+    size: '1024x1024',
+  }),
+})
+  .then((res) => res.json())
+  .then((data) => {
+    console.log('成功:', data);
+    // 在新标签页打开图片
+    if (data.imageUrl) {
+      window.open(data.imageUrl, '_blank');
+    }
   })
-})
-.then(res => res.json())
-.then(data => {
-  console.log('成功:', data)
-  // 在新标签页打开图片
-  if (data.imageUrl) {
-    window.open(data.imageUrl, '_blank')
-  }
-})
-.catch(err => console.error('错误:', err))
+  .catch((err) => console.error('错误:', err));
 ```
 
 ## 预期返回结果
@@ -161,18 +161,21 @@ fetch('/api/generate-ai-children-picture', {
 
 **原因：** Supabase 环境变量未配置或包含 "placeholder"
 
-**解决：** 
+**解决：**
+
 1. 检查 `.env.local` 中的 `NEXT_PUBLIC_SUPABASE_URL` 和 `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 2. 重启开发服务器（`npm run dev`）
 
 ### Q2: 提示"上传失败"？
 
 **可能原因：**
+
 1. `images` bucket 不存在
 2. bucket 权限设置不正确
 3. Supabase 免费配额用完
 
 **解决：**
+
 1. 在 Supabase 控制台创建 `images` bucket
 2. 设置 bucket 为 Public
 3. 检查 Storage 配额使用情况
@@ -182,6 +185,7 @@ fetch('/api/generate-ai-children-picture', {
 **原因：** bucket 未设置为 Public
 
 **解决：**
+
 1. Supabase 控制台 → Storage → images
 2. 点击 bucket 设置
 3. 勾选 "Public bucket"
@@ -199,4 +203,3 @@ fetch('/api/generate-ai-children-picture', {
 ---
 
 测试完成后，请将结果反馈给开发团队。
-

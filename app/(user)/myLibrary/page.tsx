@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useMyLibraryStore } from "./_store";
-import { Button } from "@/components/ui/button";
+import { useEffect } from 'react';
+import { useMyLibraryStore } from './_store';
+import { Button } from '@/components/ui/button';
 import {
   MyLibraryCollect,
   MyLibraryCreate,
@@ -15,13 +15,13 @@ import {
   MyLibraryRead,
   MyLibraryScreen,
   MyLibrarySearch,
-} from "./icon";
+} from './icon';
 
 export default function MyLibraryPage() {
   const { books, setBooks } = useMyLibraryStore();
   console.log(`books`, books);
   useEffect(() => {
-    const books = localStorage.getItem("myLibrary");
+    const books = localStorage.getItem('myLibrary');
     if (books) setBooks(JSON.parse(books));
   }, []);
 
@@ -36,14 +36,14 @@ export default function MyLibraryPage() {
           <div className="w-full h-40 bg-orange-50 rounded-md flex items-center justify-center relative">
             <img
               src={
-                book.data.scenes[0]?.imageUrl || "/images/myLibrary/book.png"
+                book.data.scenes[0]?.imageUrl || '/images/myLibrary/book.png'
               }
               alt="绘本封面"
               className="max-w-full max-h-full object-contain"
             />
             <div className="absolute  right-2">
-              <MyLibraryCollect/>
-              </div>
+              <MyLibraryCollect />
+            </div>
           </div>
           <div className="flex flex-col gap-1 mt-2">
             <div className="text-md font-bold text-orange-600 line-clamp-1">

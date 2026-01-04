@@ -1,35 +1,41 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Loader2, Sparkles, Copy, RefreshCw } from 'lucide-react'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Loader2, Sparkles, Copy, RefreshCw } from 'lucide-react';
 
 interface TextGeneratorProps {
-  className?: string
+  className?: string;
 }
 
 export function TextGenerator({ className }: TextGeneratorProps) {
-  const [prompt, setPrompt] = useState('')
-  const [generatedText, setGeneratedText] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [model, setModel] = useState('glm-4-flash')
-  const [maxLength, setMaxLength] = useState('500')
-  const [temperature, setTemperature] = useState('0.7')
-  const [error, setError] = useState('')
+  const [prompt, setPrompt] = useState('');
+  const [generatedText, setGeneratedText] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [model, setModel] = useState('glm-4-flash');
+  const [maxLength, setMaxLength] = useState('500');
+  const [temperature, setTemperature] = useState('0.7');
+  const [error, setError] = useState('');
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      setError('请输入提示词')
-      return
+      setError('请输入提示词');
+      return;
     }
 
-    setIsGenerating(true)
-    setError('')
-    setGeneratedText('')
+    setIsGenerating(true);
+    setError('');
+    setGeneratedText('');
 
     try {
       const response = await fetch('/api/generate-text', {
@@ -43,36 +49,36 @@ export function TextGenerator({ className }: TextGeneratorProps) {
           maxLength: parseInt(maxLength),
           temperature: parseFloat(temperature),
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.details || data.error || '生成失败')
+        throw new Error(data.details || data.error || '生成失败');
       }
 
-      setGeneratedText(data.text)
+      setGeneratedText(data.text);
     } catch (err) {
-      console.error('Text generation error:', err)
-      setError(err instanceof Error ? err.message : '生成文本时发生错误')
+      console.error('Text generation error:', err);
+      setError(err instanceof Error ? err.message : '生成文本时发生错误');
     } finally {
-      setIsGenerating(false)
+      setIsGenerating(false);
     }
-  }
+  };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(generatedText)
+      await navigator.clipboard.writeText(generatedText);
     } catch (err) {
-      console.error('Failed to copy:', err)
+      console.error('Failed to copy:', err);
     }
-  }
+  };
 
   const handleExpandPrompt = async () => {
-    const expandPrompt = `请将以下提示词进行详细扩展和丰富，使其更加具体和生动，用于AI图片生成：\n\n"${prompt}"`
+    const expandPrompt = `请将以下提示词进行详细扩展和丰富，使其更加具体和生动，用于AI图片生成：\n\n"${prompt}"`;
 
-    setIsGenerating(true)
-    setError('')
+    setIsGenerating(true);
+    setError('');
 
     try {
       const response = await fetch('/api/generate-text', {
@@ -82,27 +88,28 @@ export function TextGenerator({ className }: TextGeneratorProps) {
         },
         body: JSON.stringify({
           prompt: expandPrompt,
-          context: '你是一个专业的AI提示词优化师，擅长将简单的提示词扩展为详细、生动的描述。请提供丰富的细节，包括风格、光照、构图、色彩等方面的描述。',
+          context:
+            '你是一个专业的AI提示词优化师，擅长将简单的提示词扩展为详细、生动的描述。请提供丰富的细节，包括风格、光照、构图、色彩等方面的描述。',
           model: 'glm-4-flash',
           maxLength: 800,
           temperature: 0.8,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.details || data.error || '扩展失败')
+        throw new Error(data.details || data.error || '扩展失败');
       }
 
-      setGeneratedText(data.text)
+      setGeneratedText(data.text);
     } catch (err) {
-      console.error('Prompt expansion error:', err)
-      setError(err instanceof Error ? err.message : '扩展提示词时发生错误')
+      console.error('Prompt expansion error:', err);
+      setError(err instanceof Error ? err.message : '扩展提示词时发生错误');
     } finally {
-      setIsGenerating(false)
+      setIsGenerating(false);
     }
-  }
+  };
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -133,7 +140,9 @@ export function TextGenerator({ className }: TextGeneratorProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="glm-4-flash">GLM-4 Flash (快速)</SelectItem>
+                  <SelectItem value="glm-4-flash">
+                    GLM-4 Flash (快速)
+                  </SelectItem>
                   <SelectItem value="glm-4">GLM-4 (标准)</SelectItem>
                   <SelectItem value="glm-4-air">GLM-4 Air (轻量)</SelectItem>
                 </SelectContent>
@@ -244,5 +253,5 @@ export function TextGenerator({ className }: TextGeneratorProps) {
         </Card>
       )}
     </div>
-  )
+  );
 }

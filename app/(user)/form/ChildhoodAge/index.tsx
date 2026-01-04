@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   FormTitle,
@@ -8,17 +8,20 @@ import {
   OptionCard,
   OptionTitle,
   OptionDesc,
-} from "./style";
-import { ChildhoodAgeProps } from "../pageApi";
+} from './style';
+import { ChildhoodAgeProps } from '../pageApi';
 
 // 年龄选项数据
 const ageOptions = [
-  { id: "0-3", title: "0-3岁(婴儿期)", desc: "感官、简单词汇" },
-  { id: "3-6", title: "3-6岁(学龄前)", desc: "简单故事、认知" },
-  { id: "6-12", title: "6-12岁(小学低年级)", desc: "复杂情节、道理" },
+  { id: '0-3', title: '0-3岁(婴儿期)', desc: '感官、简单词汇' },
+  { id: '3-6', title: '3-6岁(学龄前)', desc: '简单故事、认知' },
+  { id: '6-12', title: '6-12岁(小学低年级)', desc: '复杂情节、道理' },
 ];
 
-export default function CreateNewBookForm({ selectedAge, onAgeChange }: ChildhoodAgeProps) {
+export default function CreateNewBookForm({
+  selectedAge,
+  onAgeChange,
+}: ChildhoodAgeProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center">

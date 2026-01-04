@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Image, Settings, History, Heart } from "lucide-react";
-import { Image as ImageType, Generation } from "@/lib";
-import { imageRepository, generationRepository, authService } from "@/lib";
-import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Image, Settings, History, Heart } from 'lucide-react';
+import { Image as ImageType, Generation } from '@/lib';
+import { imageRepository, generationRepository, authService } from '@/lib';
+import { toast } from '@/hooks/use-toast';
 
 export default function MyPage() {
   const [user, setUser] = useState<any>(null);
@@ -22,7 +22,7 @@ export default function MyPage() {
       try {
         const currentUser = await authService.getCurrentUser();
         if (!currentUser) {
-          window.location.href = "/auth/login";
+          window.location.href = '/auth/login';
           return;
         }
 
@@ -40,11 +40,11 @@ export default function MyPage() {
         });
         setUserGenerations(generations);
       } catch (error) {
-        console.error("获取用户数据失败:", error);
+        console.error('获取用户数据失败:', error);
         toast({
-          title: "获取失败",
-          description: "无法加载用户数据，请稍后重试",
-          variant: "destructive",
+          title: '获取失败',
+          description: '无法加载用户数据，请稍后重试',
+          variant: 'destructive',
         });
       } finally {
         setLoading(false);
@@ -103,10 +103,10 @@ export default function MyPage() {
             <div className="flex items-center mt-2 space-x-2">
               <Badge
                 variant={
-                  user.user_metadata?.role === "admin" ? "default" : "secondary"
+                  user.user_metadata?.role === 'admin' ? 'default' : 'secondary'
                 }
               >
-                {user.user_metadata?.role === "admin" ? "管理员" : "普通用户"}
+                {user.user_metadata?.role === 'admin' ? '管理员' : '普通用户'}
               </Badge>
               <Badge variant="outline">
                 注册于 {new Date(user.created_at).toLocaleDateString()}
@@ -180,15 +180,15 @@ export default function MyPage() {
                   <Card key={image.id} className="overflow-hidden">
                     <div className="relative aspect-square overflow-hidden">
                       <img
-                        src={image.image_url || ""}
+                        src={image.image_url || ''}
                         alt={image.prompt}
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute top-2 right-2">
                         <Badge
-                          variant={image.is_public ? "default" : "secondary"}
+                          variant={image.is_public ? 'default' : 'secondary'}
                         >
-                          {image.is_public ? "公开" : "私有"}
+                          {image.is_public ? '公开' : '私有'}
                         </Badge>
                       </div>
                     </div>
@@ -232,14 +232,14 @@ export default function MyPage() {
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span>模型: {generation.model}</span>
                             <span>
-                              状态:{" "}
-                              {generation.status === "success"
-                                ? "成功"
-                                : generation.status === "failed"
-                                ? "失败"
-                                : generation.status === "processing"
-                                ? "处理中"
-                                : "等待中"}
+                              状态:{' '}
+                              {generation.status === 'success'
+                                ? '成功'
+                                : generation.status === 'failed'
+                                  ? '失败'
+                                  : generation.status === 'processing'
+                                    ? '处理中'
+                                    : '等待中'}
                             </span>
                             {generation.generation_time && (
                               <span>耗时: {generation.generation_time}ms</span>

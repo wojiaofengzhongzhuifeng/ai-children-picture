@@ -1,14 +1,14 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 export function PageWrapper(props: { children: ReactNode }) {
   return <div className="py-20 bg-pink-50">{props.children}</div>;
 }
 
 export function Section(props: { children: ReactNode; className?: string }) {
-  const { children, className = "" } = props;
+  const { children, className = '' } = props;
   const baseClass =
-    "mx-auto w-full max-w-[1152px] px-4 sm:px-6 lg:px-8 text-center";
-  const combined = `${baseClass}${className ? ` ${className}` : ""}`;
+    'mx-auto w-full max-w-[1152px] px-4 sm:px-6 lg:px-8 text-center';
+  const combined = `${baseClass}${className ? ` ${className}` : ''}`;
   return <div className={combined}>{children}</div>;
 }
 

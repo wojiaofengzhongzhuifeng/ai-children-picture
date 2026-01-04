@@ -1,10 +1,10 @@
-import { Section, HeroSection, ChoiceUsCard, PageWrapper } from "./style";
+import { Section, HeroSection, ChoiceUsCard, PageWrapper } from './style';
 import {
   ChoiceUsEasyIcon,
   ChoiceUsFlashIcon,
   ChoiceUsQualityIcon,
   ChoiceUsSafeIcon,
-} from "@/app/(user)/my/icon";
+} from '@/app/(user)/my/icon';
 
 export default function ChoiceUs() {
   return (

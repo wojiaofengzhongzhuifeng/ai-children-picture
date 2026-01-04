@@ -4,8 +4,8 @@ import {
   CreatePictureSubtitle,
   CreatePictureTitle,
   CreatePictureWrapper,
-} from "./style";
-import { PageFootIcon, PageFootTickIcon } from "../icon";
+} from './style';
+import { PageFootIcon, PageFootTickIcon } from '../icon';
 
 export default function StartCreate() {
   return (

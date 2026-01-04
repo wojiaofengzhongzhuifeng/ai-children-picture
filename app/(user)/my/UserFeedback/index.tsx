@@ -1,8 +1,8 @@
-import { Section, HeroSection, UserFeedbackCard, PageWrapper } from "./style";
+import { Section, HeroSection, UserFeedbackCard, PageWrapper } from './style';
 import {
   UserFeedbackHeadIcon,
   UserFeedbackStarIcon,
-} from "@/app/(user)/my/icon";
+} from '@/app/(user)/my/icon';
 export default function UserFeedback() {
   return (
     <PageWrapper>

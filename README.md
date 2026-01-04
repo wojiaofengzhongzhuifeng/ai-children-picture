@@ -31,11 +31,13 @@
 ### 简要步骤
 
 1. **安装依赖**
+
    ```bash
    pnpm install
    ```
 
 2. **配置环境变量**
+
    ```bash
    cp .env.example .env.local
    # 编辑 .env.local 文件，填入你的 API 密钥
@@ -45,6 +47,7 @@
    - 在 Supabase 中创建表（详见 [docs/setup.md](./docs/setup.md)）
 
 4. **启动开发服务器**
+
    ```bash
    pnpm dev
    ```

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { SectionTitle, OptionGroup } from "./style";
-import { StoryOverviewIcon } from "./icon";
-import { StoryOverviewProps } from "../pageApi";
+import { SectionTitle, OptionGroup } from './style';
+import { StoryOverviewIcon } from './icon';
+import { StoryOverviewProps } from '../pageApi';
 
 export default function StoryOverview({ value, onChange }: StoryOverviewProps) {
   return (

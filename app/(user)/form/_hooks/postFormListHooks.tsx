@@ -1,7 +1,7 @@
-import { toast } from "@/hooks/use-toast";
-import { PostFormList, postFormList } from "../_api/postFormLIst";
-import { useRequest } from "ahooks";
-import { useEffect } from "react";
+import { toast } from '@/hooks/use-toast';
+import { PostFormList, postFormList } from '../_api/postFormLIst';
+import { useRequest } from 'ahooks';
+import { useEffect } from 'react';
 
 interface PostFormListResponse {
   success: boolean;
@@ -18,18 +18,18 @@ export const usePostFormListHooks = () => {
   });
 
   useEffect(() => {
-    console.log("data", data);
+    console.log('data', data);
     if (data && data.success) {
       toast({
-        title: "成功",
-        description: data.message || "请求成功",
+        title: '成功',
+        description: data.message || '请求成功',
       });
     }
     if (error) {
       toast({
-        title: "错误",
-        description: error.message || "请求失败",
-        variant: "destructive",
+        title: '错误',
+        description: error.message || '请求失败',
+        variant: 'destructive',
       });
     }
   }, [data, error]);

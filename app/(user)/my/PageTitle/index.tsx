@@ -3,7 +3,7 @@ import {
   CreationIcon,
   BrowseLibraryIcon,
   Arrows,
-} from "@/app/(user)/my/icon";
+} from '@/app/(user)/my/icon';
 import {
   PageWrapper,
   Section,
@@ -15,7 +15,7 @@ import {
   FeatureChipOrange,
   FeatureChipPink,
   FeatureChipPurple,
-} from "./style";
+} from './style';
 
 export default function PageTitle() {
   return (

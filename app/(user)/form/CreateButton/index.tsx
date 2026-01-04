@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { CreateButtonIcon } from "./icon";
-import { CreateButtonProps } from "../pageApi";
-import { usePostFormListHooks } from "../_hooks/postFormListHooks";
-import { PostFormList } from "../_api/postFormLIst";
-import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { CreateButtonIcon } from './icon';
+import { CreateButtonProps } from '../pageApi';
+import { usePostFormListHooks } from '../_hooks/postFormListHooks';
+import { PostFormList } from '../_api/postFormLIst';
+import { toast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function CreateButton({ onSubmit }: CreateButtonProps) {
   const { run, loading, success, data } = usePostFormListHooks();
@@ -16,11 +16,11 @@ export default function CreateButton({ onSubmit }: CreateButtonProps) {
   useEffect(() => {
     if (success && data) {
       // 将数据存储到 sessionStorage，以便在 show 页面使用
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("bookData", JSON.stringify(data));
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('bookData', JSON.stringify(data));
       }
       // 跳转到 show 页面
-      router.push("/show");
+      router.push('/show');
     }
   }, [success, data, router]);
 
@@ -42,7 +42,7 @@ export default function CreateButton({ onSubmit }: CreateButtonProps) {
         className="bg-orange-500 text-white px-14 py-4 rounded-md w-[825px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <CreateButtonIcon />
-        {loading ? "生成中..." : "生成我的绘本"}
+        {loading ? '生成中...' : '生成我的绘本'}
         <CreateButtonIcon />
       </button>
     </div>

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 // 页面容器
 export function PageWrapper(props: { children: ReactNode }) {
@@ -47,8 +47,8 @@ export function OptionCard(props: {
       onClick={onClick}
       className={`pl-4 pr-32 py-3 pb-4 rounded-lg border-3 flex flex-col gap-1 cursor-pointer hover:border-pink-300 transition-all ${
         selected
-          ? "border-orange-500 bg-orange-50 scale-105"
-          : "border-yellow-200 bg-white"
+          ? 'border-orange-500 bg-orange-50 scale-105'
+          : 'border-yellow-200 bg-white'
       }`}
     >
       {children}
@@ -59,7 +59,7 @@ export function OptionCard(props: {
 // 选项卡片标题
 export function OptionTitle(props: { children: ReactNode; selected: boolean }) {
   return (
-    <span className={props.selected ? "text-orange-600" : "text-gray-700"}>
+    <span className={props.selected ? 'text-orange-600' : 'text-gray-700'}>
       {props.children}
     </span>
   );

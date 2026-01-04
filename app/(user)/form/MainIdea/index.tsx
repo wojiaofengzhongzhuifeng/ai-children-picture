@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { SectionTitle, OptionGroup } from "./style";
-import { MainIdeaIcon } from "./icon";
-import { MainIdeaProps } from "../pageApi";
+import { SectionTitle, OptionGroup } from './style';
+import { MainIdeaIcon } from './icon';
+import { MainIdeaProps } from '../pageApi';
 
 export default function MainIdea({ value, onChange }: MainIdeaProps) {
   return (

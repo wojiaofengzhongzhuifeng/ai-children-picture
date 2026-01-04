@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import type { ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 // 页面骨架
 export function PageWrapper(props: { children: ReactNode }) {
@@ -8,10 +8,10 @@ export function PageWrapper(props: { children: ReactNode }) {
 }
 
 export function Section(props: { children: ReactNode; className?: string }) {
-  const { children, className = "" } = props;
+  const { children, className = '' } = props;
   const baseClass =
-    "mx-auto w-full max-w-[1152px] px-4 sm:px-6 lg:px-8 text-center";
-  const combined = `${baseClass}${className ? ` ${className}` : ""}`;
+    'mx-auto w-full max-w-[1152px] px-4 sm:px-6 lg:px-8 text-center';
+  const combined = `${baseClass}${className ? ` ${className}` : ''}`;
   return <div className={combined}>{children}</div>;
 }
 
@@ -33,7 +33,10 @@ export function HeroSubtitle(props: { children: ReactNode }) {
 }
 
 // CTA 按钮组件
-export function CtaPrimaryButton(props: { children: ReactNode; href?: string }) {
+export function CtaPrimaryButton(props: {
+  children: ReactNode;
+  href?: string;
+}) {
   const button = (
     <Button className="bg-orange-500 rounded-sm px-14 py-8 border-2 border-orange-200 hover:bg-orange-500/80">
       {props.children}

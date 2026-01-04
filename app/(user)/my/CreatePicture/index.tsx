@@ -1,9 +1,9 @@
-import { CreatePictureCard, HeroSection, PageWrapper, Section } from "./style";
+import { CreatePictureCard, HeroSection, PageWrapper, Section } from './style';
 import {
   CreatePictureNumber1,
   CreatePictureNumber2,
   CreatePictureNumber3,
-} from "@/app/(user)/my/icon";
+} from '@/app/(user)/my/icon';
 
 export default function CreatePicture() {
   return (

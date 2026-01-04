@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { usePostFormListHooks } from "../form/_hooks/postFormListHooks";
-import { useShowPageStore, useStoryDataStore } from "./_store";
-import { postAiCreactPicture } from "./_api/postAiCreactPicture";
-import { CopyIcon, DeleteIcon, EditIcon, SaveIcon } from "lucide-react";
-import { AddIcon, RefreshIcon } from "./icon";
-import { usePostAiCreactPitureHooks } from "./_hooks/postAiCreactPitureHooks";
+import { useEffect, useState, useRef } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { usePostFormListHooks } from '../form/_hooks/postFormListHooks';
+import { useShowPageStore, useStoryDataStore } from './_store';
+import { postAiCreactPicture } from './_api/postAiCreactPicture';
+import { CopyIcon, DeleteIcon, EditIcon, SaveIcon } from 'lucide-react';
+import { AddIcon, RefreshIcon } from './icon';
+import { usePostAiCreactPitureHooks } from './_hooks/postAiCreactPitureHooks';
 
 // 场景类型定义
 interface Scene {
@@ -19,7 +19,7 @@ interface Scene {
 export default function ShowPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const payload = searchParams.get("payload");
+  const payload = searchParams.get('payload');
   const [bookData, setBookData] = useState<any>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [isGeneratingImages, setIsGeneratingImages] = useState(false);
@@ -38,7 +38,7 @@ export default function ShowPage() {
     copyScene,
   } = useStoryDataStore();
   const postAiCreactPictureHooks = usePostAiCreactPitureHooks();
-  const [editPosition, setEditPosition] = useState<"photos" | "text">("photos");
+  const [editPosition, setEditPosition] = useState<'photos' | 'text'>('photos');
 
   useEffect(() => {
     if (!payload) return;
@@ -47,7 +47,7 @@ export default function ShowPage() {
       const parsed = JSON.parse(decodeURIComponent(payload));
       setBookData(parsed);
     } catch (e) {
-      console.error("解析 payload 失败:", e);
+      console.error('解析 payload 失败:', e);
     }
   }, [payload]); // 只依赖 payload 字符串，不依赖整个 searchParams 对象
 
@@ -85,8 +85,8 @@ export default function ShowPage() {
             try {
               const response = await postAiCreactPicture({
                 prompt: prompt,
-                model: "dall-e-3",
-                size: "512x512",
+                model: 'dall-e-3',
+                size: '512x512',
                 sceneIndex: index,
               });
 
@@ -139,18 +139,18 @@ export default function ShowPage() {
   const handleSave = () => {
     if (!storyData) return;
     // 保存到 localStorage
-    const savedBooks = localStorage.getItem("myLibrary");
+    const savedBooks = localStorage.getItem('myLibrary');
     const books = savedBooks ? JSON.parse(savedBooks) : [];
     const newBook = {
       ...storyData,
       createdAt: new Date().toISOString(),
     };
     books.push(newBook);
-    localStorage.setItem("myLibrary", JSON.stringify(books));
-    router.push("/myLibrary");
+    localStorage.setItem('myLibrary', JSON.stringify(books));
+    router.push('/myLibrary');
   };
 
-  const handleEditPosition = (e: "photos" | "text") => {
+  const handleEditPosition = (e: 'photos' | 'text') => {
     setEditPosition(e);
   };
 
@@ -159,7 +159,7 @@ export default function ShowPage() {
   const currentScene = scenes[pageIndex] as Scene | undefined;
   const totalPages = scenes.length;
 
-  console.log("storyData", storyData);
+  console.log('storyData', storyData);
   return (
     <div className="flex gap-2 h-screen">
       {/* 左侧页面列表 */}
@@ -176,13 +176,13 @@ export default function ShowPage() {
                 key={index}
                 className={`bg-yellow-50 p-2 rounded-lg border-solid border-4 cursor-pointer relative overflow-hidden transition-all ${
                   pageIndex === index
-                    ? "border-pink-500 ring-2 ring-pink-300"
-                    : "border-orange-300 hover:border-orange-400"
+                    ? 'border-pink-500 ring-2 ring-pink-300'
+                    : 'border-orange-300 hover:border-orange-400'
                 }`}
                 onClick={() => setPageIndex(index)}
               >
                 <img
-                  src={scene.imageUrl || ""}
+                  src={scene.imageUrl || ''}
                   alt={`第${index + 1}页`}
                   className="w-full h-32 object-cover rounded-md"
                 />
@@ -202,8 +202,8 @@ export default function ShowPage() {
               className="flex items-center justify-center gap-1 bg-green-500 text-white px-4 py-2 rounded-full w-full hover:bg-green-600 transition-colors"
               onClick={() => {
                 insertScene(pageIndex, {
-                  text: "新页面文字内容",
-                  img_text_prompt: "请输入图片提示词",
+                  text: '新页面文字内容',
+                  img_text_prompt: '请输入图片提示词',
                   imageUrl: null,
                 });
                 // 跳转到新插入的页面（当前页的下一页）
@@ -258,19 +258,19 @@ export default function ShowPage() {
             {/* 图片区域 */}
             <div className="border-4 border-orange-300 rounded-md p-4 bg-gray-200 shadow-lg">
               <img
-                src={currentScene?.imageUrl || ""}
+                src={currentScene?.imageUrl || ''}
                 alt={`第${pageIndex + 1}页预览`}
                 className="w-full h-auto object-cover rounded-md"
-                onClick={() => handleEditPosition("photos")}
+                onClick={() => handleEditPosition('photos')}
               />
             </div>
             {/* 文字区域 */}
             <div
               className="border-4 border-yellow-300 rounded-md p-4 text-orange-500 flex items-center gap-2"
-              onClick={() => handleEditPosition("text")}
+              onClick={() => handleEditPosition('text')}
             >
               <EditIcon className="w-4 h-4 shrink-0" />
-              <span>{currentScene?.text || "暂无文字"}</span>
+              <span>{currentScene?.text || '暂无文字'}</span>
             </div>
           </div>
         </div>
@@ -280,16 +280,16 @@ export default function ShowPage() {
         <div className="bg-white border-green-200 border-solid border-4 rounded-md p-4 h-full flex flex-col">
           <h2 className="text-orange-500 text-2xl mb-2">🖊编辑属性</h2>
           <div className="text-orange-400 text-sm mb-4">
-            {" "}
-            正在编辑{editPosition === "photos" ? "图片" : "文字"}
+            {' '}
+            正在编辑{editPosition === 'photos' ? '图片' : '文字'}
           </div>
           <hr className="border-gray-300 my-2" />
 
-          {editPosition === "photos" ? (
+          {editPosition === 'photos' ? (
             <>
               <div className="text-orange-500 text-sm mb-2  ">图片提示词</div>
               <textarea
-                value={currentScene?.img_text_prompt || ""}
+                value={currentScene?.img_text_prompt || ''}
                 onChange={(e) =>
                   updateSceneImagePrompt(pageIndex, e.target.value)
                 }
@@ -298,9 +298,9 @@ export default function ShowPage() {
               <button
                 onClick={() => {
                   postAiCreactPictureHooks.run({
-                    prompt: currentScene?.img_text_prompt || "",
-                    model: "dall-e-3",
-                    size: "512x512",
+                    prompt: currentScene?.img_text_prompt || '',
+                    model: 'dall-e-3',
+                    size: '512x512',
                   });
                 }}
                 className="bg-blue-500 text-white px-3 py-2 mt-2 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-1 text-sm w-full justify-center"
@@ -313,16 +313,16 @@ export default function ShowPage() {
             <>
               <div className="text-orange-500 text-sm mb-2">文字内容</div>
               <textarea
-                value={currentScene?.text || ""}
+                value={currentScene?.text || ''}
                 onChange={(e) => updateSceneText(pageIndex, e.target.value)}
                 className="border-4 border-yellow-300 rounded-md p-2 h-64"
               />
               <button
                 onClick={() => {
                   postAiCreactPictureHooks.run({
-                    prompt: currentScene?.text || "",
-                    model: "dall-e-3",
-                    size: "512x512",
+                    prompt: currentScene?.text || '',
+                    model: 'dall-e-3',
+                    size: '512x512',
                   });
                 }}
                 className="bg-orange-500 text-white px-3 py-2 mt-2 rounded-full hover:bg-orange-600 transition-colors flex items-center gap-1 text-sm w-full justify-center"
@@ -332,7 +332,7 @@ export default function ShowPage() {
               </button>
             </>
           )}
-          {editPosition === "photos" && (
+          {editPosition === 'photos' && (
             <div className="border-2 border-blue-300 rounded-md p-2 mt-4 text-blue-500 bg-blue-50">
               <div>💡提示</div>
               <div>
@@ -340,7 +340,7 @@ export default function ShowPage() {
               </div>
             </div>
           )}
-          {editPosition === "text" && (
+          {editPosition === 'text' && (
             <div className="border-2 border-orange-300 rounded-md p-2 mt-4 text-orange-500 bg-orange-50">
               <div>💡提示</div>
               <div>

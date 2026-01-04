@@ -1,10 +1,10 @@
-import { useRequest } from "ahooks";
+import { useRequest } from 'ahooks';
 import {
   postAiCreactPicture,
   PostAiCreactPicture,
-} from "../_api/postAiCreactPicture";
-import { useEffect } from "react";
-import { toast } from "@/hooks/use-toast";
+} from '../_api/postAiCreactPicture';
+import { useEffect } from 'react';
+import { toast } from '@/hooks/use-toast';
 
 interface PostAiCreactPictureResponse {
   success: boolean;
@@ -23,15 +23,15 @@ export const usePostAiCreactPitureHooks = () => {
   useEffect(() => {
     if (data && data.success) {
       toast({
-        title: "成功",
-        description: data.message || "请求成功",
+        title: '成功',
+        description: data.message || '请求成功',
       });
     }
     if (error) {
       toast({
-        title: "错误",
-        description: error.message || "请求失败",
-        variant: "destructive",
+        title: '错误',
+        description: error.message || '请求失败',
+        variant: 'destructive',
       });
     }
   }, [data, error]);

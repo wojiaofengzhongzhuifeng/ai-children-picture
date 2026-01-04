@@ -4,8 +4,8 @@ import {
   PageFooterTitle,
   PageFooterWrapper,
   Section,
-} from "./style";
-import { PageFooterIcon } from "../icon";
+} from './style';
+import { PageFooterIcon } from '../icon';
 
 export default function PageFooter() {
   return (

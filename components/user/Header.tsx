@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,49 +11,47 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { User, LogOut, Settings, Image } from 'lucide-react'
-import { authService } from '@/lib'
-import { useState, useEffect } from 'react'
+} from '@/components/ui/dropdown-menu';
+import { User, LogOut, Settings, Image } from 'lucide-react';
+import { authService } from '@/lib';
+import { useState, useEffect } from 'react';
 
 export function Header() {
-  const pathname = usePathname()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const pathname = usePathname();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const currentUser = await authService.getCurrentUser()
-        setUser(currentUser)
+        const currentUser = await authService.getCurrentUser();
+        setUser(currentUser);
       } catch (error) {
-        console.error('Failed to fetch user:', error)
+        console.error('Failed to fetch user:', error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchUser()
+    fetchUser();
 
-    const { subscription } = authService.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null)
-      }
-    )
+    const { subscription } = authService.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSignOut = async () => {
     try {
-      await authService.signOut()
-      window.location.href = '/'
+      await authService.signOut();
+      window.location.href = '/';
     } catch (error) {
-      console.error('Failed to sign out:', error)
+      console.error('Failed to sign out:', error);
     }
-  }
+  };
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => pathname === path;
 
   return (
     <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -63,7 +61,7 @@ export function Header() {
             <Image className="h-6 w-6" />
             <span className="font-bold text-xl">AI图片生成</span>
           </Link>
-          
+
           <nav className="hidden md:flex space-x-6">
             <Link
               href="/generate"
@@ -96,9 +94,15 @@ export function Header() {
           ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+                    <AvatarImage
+                      src={user.user_metadata?.avatar_url}
+                      alt={user.email}
+                    />
                     <AvatarFallback>
                       {user.email?.charAt(0).toUpperCase()}
                     </AvatarFallback>
@@ -149,5 +153,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
