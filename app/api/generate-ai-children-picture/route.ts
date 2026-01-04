@@ -2,11 +2,75 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as fs from 'fs'
 import * as path from 'path'
 
+// Mock 测试图片列表
+const MOCK_IMAGES = [
+  '/images/ai-children/1766374356248-m4qa5.png',
+  '/images/ai-children/1766374506450-uhdyoh.png',
+  '/images/ai-children/1766374579725-u3lnyo.png',
+  '/images/ai-children/1766539253712-enlwny.png',
+  '/images/ai-children/1766561009253-rcpymh.png',
+  '/images/ai-children/1766569554612-3xkep.png',
+  '/images/ai-children/1766569619677-8ts6gh.png'
+]
+
+// 生成 Mock 响应
+function getMockResponse(prompt: string, negativePrompt?: string, size?: string, sceneIndex?: number) {
+  // 根据 sceneIndex 返回对应图片，保证顺序稳定
+  const index = sceneIndex !== undefined ? sceneIndex : 0
+  const imageUrl = MOCK_IMAGES[index % MOCK_IMAGES.length]
+
+  // 解析尺寸
+  let width = 1024
+  let height = 1024
+  if (size && size.includes('x')) {
+    const [w, h] = size.split('x').map(Number)
+    if (!isNaN(w) && !isNaN(h)) {
+      width = w
+      height = h
+    }
+  }
+
+  return {
+    success: true,
+    imageUrl: imageUrl,
+    originalUrl: `https://mock-zhipu-url.com${imageUrl}`,
+    storagePath: imageUrl.replace('/images/', 'images/'),
+    model: 'cogview-4',
+    generationTime: Math.floor(Math.random() * 3000) + 2000, // 随机 2-5 秒
+    metadata: {
+      prompt: prompt,
+      negativePrompt: negativePrompt || '',
+      width: width,
+      height: height,
+      steps: 50,
+      seed: Math.floor(Math.random() * 1000000)
+    }
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     // 1. 解析请求参数
     const body = await request.json()
-    const { prompt, negativePrompt, model, size } = body
+    const { prompt, negativePrompt, model, size, sceneIndex } = body
+
+    // 检查是否使用 Mock 数据（忽略大小写和空格）
+    if (process.env.USE_MOCK_DATA?.toLowerCase().trim() === 'true') {
+      console.log('使用 Mock 数据返回测试图片')
+      
+      // Mock 模式下也需要验证 prompt
+      if (!prompt || prompt.trim() === '') {
+        return NextResponse.json(
+          { error: '请提供图片描述' },
+          { status: 400 }
+        )
+      }
+      
+      // 模拟一定的延迟（500ms-1500ms）
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500))
+      
+      return NextResponse.json(getMockResponse(prompt, negativePrompt, size, sceneIndex))
+    }
 
     // 2. 参数验证
     if (!prompt || prompt.trim() === '') {

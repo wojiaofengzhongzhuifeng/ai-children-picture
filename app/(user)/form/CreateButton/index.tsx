@@ -2,22 +2,47 @@
 
 import { CreateButtonIcon } from "./icon";
 import { CreateButtonProps } from "../pageApi";
+import { usePostFormListHooks } from "../_hooks/postFormListHooks";
+import { PostFormList } from "../_api/postFormLIst";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CreateButton({ onSubmit }: CreateButtonProps) {
-  const handleCreate = () => {
-    const formData = onSubmit();
-    console.log("生成我的绘本 - 表单数据:");
-    console.log(JSON.stringify(formData, null, 2));
+  const { run, loading, success, data } = usePostFormListHooks();
+  const router = useRouter();
+
+  // 监听成功状态，成功后跳转
+  useEffect(() => {
+    if (success && data) {
+      // 将数据存储到 sessionStorage，以便在 show 页面使用
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("bookData", JSON.stringify(data));
+      }
+      // 跳转到 show 页面
+      router.push("/show");
+    }
+  }, [success, data, router]);
+
+  const handleCreate = async () => {
+    const formData = onSubmit(); // 这里就是你现在的 FormData（child_age 等）
+
+    // 把整份表单对象序列化并编码
+    const payload = encodeURIComponent(JSON.stringify(formData));
+
+    // 用 query 传参
+    router.push(`/show?payload=${payload}`);
   };
 
   return (
     <div className="flex justify-center mt-10">
-      <button 
+      <button
         onClick={handleCreate}
-        className="bg-orange-500 text-white px-14 py-4 rounded-md w-[825px] flex items-center justify-center gap-2"
+        disabled={loading}
+        className="bg-orange-500 text-white px-14 py-4 rounded-md w-[825px] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <CreateButtonIcon />
-        生成我的绘本
+        {loading ? "生成中..." : "生成我的绘本"}
         <CreateButtonIcon />
       </button>
     </div>

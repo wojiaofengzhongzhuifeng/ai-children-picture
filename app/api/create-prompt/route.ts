@@ -45,8 +45,72 @@ interface StoryScene {
   img_text_prompt: string
 }
 
+// Mock 测试数据
+const MOCK_RESPONSE = {
+  success: true,
+  scenes: [
+    {
+      text: "小猫在花园里找到了一篮子美味的食物。123321321",
+      img_text_prompt: "第一条提示词"
+    },
+    {
+      text: "小猫看着篮子里的食物，想起了它的好朋友小狗。",
+      img_text_prompt: "第二条提示词"
+    },
+    {
+      text: "小猫决定把食物分成两份，一份给自己，一份给小狗。",
+      img_text_prompt: "第三条提示词"
+    },
+    {
+      text: "小猫和小狗一起分享了美味的食物，感到非常快乐。",
+      img_text_prompt: "第四条提示词"
+    },
+    {
+      text: "小猫学会了分享，它感到非常自豪。",
+      img_text_prompt: "第五条提示词"
+    },
+    {
+      text: "小狗也学会了分享，它把它的玩具给小猫玩。",
+      img_text_prompt: "第六条提示词"
+    },
+    {
+      text: "小猫和小狗成为了最好的朋友，一起玩耍。",
+      img_text_prompt: "第七条提示词"
+    },
+    {
+      text: "小猫和小狗一起度过了美好的时光，它们学会了分享的重要性。",
+      img_text_prompt: "第八条提示词"
+    }
+  ],
+  sceneCount: 8,
+  generationTime: 52447,
+  metadata: {
+    child_age: "infant",
+    child_age_label: "0-2岁婴幼儿",
+    illustration_style: "crayon",
+    illustration_style_label: "蜡笔画风格",
+    themes: ["emotional_education"],
+    themes_label: "情感教育",
+    story_overview: "小猫分享食物",
+    central_idea: "学会分享",
+    model: "glm-4-flash",
+    usage: {
+      completion_tokens: 991,
+      prompt_tokens: 902,
+      total_tokens: 1893
+    }
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
+    console.log('process.env.USE_MOCK_DATA', process.env.USE_MOCK_DATA, typeof process.env.USE_MOCK_DATA)
+    // 检查是否使用 Mock 数据（忽略大小写和空格）
+    if (process.env.USE_MOCK_DATA?.toLowerCase().trim() === 'true') {
+      console.log('使用 Mock 数据返回测试响应')
+      return NextResponse.json(MOCK_RESPONSE)
+    }
+
     // 1. 解析请求参数
     const body: CreatePromptRequest = await request.json()
     const { child_age, illustration_style, themes, story_overview, central_idea } = body
@@ -348,6 +412,8 @@ export async function POST(request: NextRequest) {
       generationTime: `${generationTime}ms`,
       sceneCount: scenes.length
     })
+
+
 
     // 10. 返回结果
     return NextResponse.json({
